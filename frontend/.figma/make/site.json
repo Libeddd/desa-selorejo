@@ -1,0 +1,10 @@
+{
+  "description": "Showcases modern Indonesian village profiles with elegant design, highlighting local statistics, businesses, and community information for residents and visitors.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
