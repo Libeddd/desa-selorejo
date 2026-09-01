@@ -120,26 +120,26 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20">
         {/* Logo */}
         <button onClick={() => scrollTo("beranda")} className="flex items-center gap-3 group">
-          <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold"
+          <span
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold block"
             style={{ background: "var(--dark-green)" }}
           >
             DS
-          </div>
-          <div className="text-left">
-            <div
-              className="font-serif font-semibold text-base leading-tight"
+          </span>
+          <span className="text-left block">
+            <span
+              className="font-serif font-semibold text-base leading-tight block"
               style={{ color: scrolled ? "var(--dark-green)" : "#fff" }}
             >
               Desa {DESA_NAME}
-            </div>
-            <div
-              className="text-xs leading-none"
+            </span>
+            <span
+              className="text-xs leading-none block"
               style={{ color: scrolled ? "var(--sage-green)" : "rgba(255,255,255,0.75)" }}
             >
               {KECAMATAN} · {KABUPATEN}
-            </div>
-          </div>
+            </span>
+          </span>
         </button>
 
         {/* Desktop links */}
@@ -1005,9 +1005,9 @@ function OfficialCard({
 function ConnectorVertical() {
   return (
     <div className="flex flex-col items-center justify-center my-1.5">
-      <div className="w-0.5 h-7 bg-gradient-to-b from-[var(--dark-green)] to-[var(--sage-green)]" />
-      <div className="w-2.5 h-2.5 rounded-full bg-[var(--sage-green)] shadow-xs" />
-      <div className="w-0.5 h-7 bg-gradient-to-b from-[var(--sage-green)] to-[var(--dark-green)]" />
+      <div className="w-0.5 h-7" style={{ background: "linear-gradient(to bottom, var(--dark-green), var(--sage-green))" }} />
+      <div className="w-2.5 h-2.5 rounded-full shadow-xs" style={{ background: "var(--sage-green)" }} />
+      <div className="w-0.5 h-7" style={{ background: "linear-gradient(to bottom, var(--sage-green), var(--dark-green))" }} />
     </div>
   );
 }
@@ -1021,7 +1021,7 @@ function Perangkat() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <div className="max-w-xl mb-14 text-center mx-auto">
-          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[rgba(35,69,44,0.08)]">
+          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full" style={{ background: "rgba(35,69,44,0.08)" }}>
             <span
               className="text-xs font-semibold tracking-widest uppercase"
               style={{ color: "var(--dark-green)" }}
