@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -916,63 +916,6 @@ function Perangkat() {
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
             >
-              Aparatur Desa
-            </span>
-          </div>
-          <h2
-            className="font-serif font-bold leading-tight"
-            style={{ fontSize: "clamp(1.8rem, 3vw, 2.75rem)", color: "var(--charcoal)" }}
-          >
-            Perangkat Desa {DESA_NAME}
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
-          {PERANGKAT.map((p) => (
-            <div
-              key={p.name}
-              className="flex flex-col items-center text-center p-5 rounded-2xl transition-all duration-300"
-              style={{
-                background: "var(--off-white)",
-                boxShadow: "0 2px 12px rgba(35,69,44,0.06)",
-                border: "1px solid rgba(216,203,168,0.5)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 30px rgba(35,69,44,0.12)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(35,69,44,0.06)";
-              }}
-            >
-              <div
-                className="w-20 h-20 rounded-full overflow-hidden mb-4"
-                style={{
-                  border: "3px solid var(--beige)",
-                  boxShadow: "0 4px 14px rgba(35,69,44,0.15)",
-                  background: "var(--beige)",
-                }}
-              >
-                <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
-              </div>
-              <span className="text-xs font-medium mb-1" style={{ color: "var(--sage-green)" }}>
-                {p.jabatan}
-              </span>
-              <h3 className="font-serif font-semibold text-sm leading-snug mb-4" style={{ color: "var(--charcoal)" }}>
-                {p.name}
-              </h3>
-              <div className="flex items-center justify-center gap-2">
-                <a
-                  href={`https://wa.me/${p.phone}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
-                  style={{ background: "rgba(37,211,102,0.12)", color: "#25D366" }}
-                >
-                  <IconWhatsApp size={14} />
-                </a>
-                <a
                   href={`tel:+${p.phone}`}
                   className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
                   style={{ background: "rgba(35,69,44,0.08)", color: "var(--dark-green)" }}
