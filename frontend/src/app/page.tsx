@@ -866,21 +866,25 @@ function Umkm() {
   );
 }
 
-// ─── Perangkat Desa ──────────────────────────────────────────────────────────
+// ─── Perangkat Desa (Flowchart Hierarchy) ────────────────────────────────────
 
-const PERANGKAT = [
-  {
-    name: "H. Supriyadi, S.IP.",
-    jabatan: "Kepala Desa",
-    phone: "628111222333",
-    img: "https://images.unsplash.com/photo-1648448942225-7aa06c7e8f79?w=200&h=200&fit=crop&auto=format",
-  },
-  {
-    name: "Dra. Rini Kartika",
-    jabatan: "Sekretaris Desa",
-    phone: "628222333444",
-    img: "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=200&h=200&fit=crop&auto=format",
-  },
+const KEPALA_DESA = {
+  name: "H. Supriyadi, S.IP.",
+  jabatan: "Kepala Desa",
+  role: "Pimpinan Desa",
+  phone: "628111222333",
+  img: "https://images.unsplash.com/photo-1648448942225-7aa06c7e8f79?w=200&h=200&fit=crop&auto=format",
+};
+
+const SEKRETARIS_DESA = {
+  name: "Dra. Rini Kartika",
+  jabatan: "Sekretaris Desa",
+  role: "Sekretariat Desa",
+  phone: "628222333444",
+  img: "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=200&h=200&fit=crop&auto=format",
+};
+
+const KAUR_LIST = [
   {
     name: "Agus Setiawan, S.E.",
     jabatan: "Kaur Keuangan",
@@ -901,37 +905,197 @@ const PERANGKAT = [
   },
 ];
 
+function OfficialCard({
+  p,
+  isFeatured = false,
+  badgeBg = "var(--dark-green)",
+  badgeColor = "#fff",
+}: {
+  p: { name: string; jabatan: string; role?: string; phone: string; img: string };
+  isFeatured?: boolean;
+  badgeBg?: string;
+  badgeColor?: string;
+}) {
+  return (
+    <div
+      className="relative flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 group"
+      style={{
+        background: "var(--off-white)",
+        boxShadow: isFeatured
+          ? "0 8px 30px rgba(35,69,44,0.12)"
+          : "0 2px 14px rgba(35,69,44,0.06)",
+        border: isFeatured
+          ? "2px solid var(--sage-green)"
+          : "1px solid rgba(216,203,168,0.6)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = isFeatured
+          ? "0 16px 40px rgba(35,69,44,0.2)"
+          : "0 12px 30px rgba(35,69,44,0.12)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+        (e.currentTarget as HTMLElement).style.boxShadow = isFeatured
+          ? "0 8px 30px rgba(35,69,44,0.12)"
+          : "0 2px 14px rgba(35,69,44,0.06)";
+      }}
+    >
+      {/* Role Badge */}
+      <span
+        className="text-[11px] font-semibold tracking-wider uppercase px-3.5 py-1 rounded-full mb-3.5 shadow-xs"
+        style={{ background: badgeBg, color: badgeColor }}
+      >
+        {p.jabatan}
+      </span>
+
+      {/* Avatar Image */}
+      <div
+        className={`relative ${isFeatured ? "w-24 h-24" : "w-20 h-20"} rounded-full overflow-hidden mb-3.5 transition-transform duration-300 group-hover:scale-105`}
+        style={{
+          border: isFeatured ? "4px solid var(--beige)" : "3px solid var(--beige)",
+          boxShadow: "0 4px 14px rgba(35,69,44,0.15)",
+          background: "var(--beige)",
+        }}
+      >
+        <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
+      </div>
+
+      {/* Name */}
+      <h3
+        className={`font-serif font-bold ${isFeatured ? "text-base lg:text-lg" : "text-sm lg:text-base"} leading-snug mb-3`}
+        style={{ color: "var(--charcoal)" }}
+      >
+        {p.name}
+      </h3>
+
+      {/* Contact Quick Buttons */}
+      <div className="flex items-center justify-center gap-2 mt-auto pt-1">
+        <a
+          href={`https://wa.me/${p.phone}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          title="WhatsApp"
+          style={{ background: "rgba(37,211,102,0.15)", color: "#25D366" }}
+        >
+          <IconWhatsApp size={14} />
+        </a>
+        <a
+          href={`tel:+${p.phone}`}
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          title="Telepon"
+          style={{ background: "rgba(35,69,44,0.1)", color: "var(--dark-green)" }}
+        >
+          <IconPhone />
+        </a>
+        <a
+          href={`mailto:desa.${DESA_NAME.toLowerCase()}@${KABUPATEN.toLowerCase()}.go.id`}
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          title="Email"
+          style={{ background: "rgba(123,146,117,0.15)", color: "var(--sage-green)" }}
+        >
+          <IconMail />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function ConnectorVertical() {
+  return (
+    <div className="flex flex-col items-center justify-center my-1.5">
+      <div className="w-0.5 h-7 bg-gradient-to-b from-[var(--dark-green)] to-[var(--sage-green)]" />
+      <div className="w-2.5 h-2.5 rounded-full bg-[var(--sage-green)] shadow-xs" />
+      <div className="w-0.5 h-7 bg-gradient-to-b from-[var(--sage-green)] to-[var(--dark-green)]" />
+    </div>
+  );
+}
+
 function Perangkat() {
   return (
     <section
       id="perangkat-desa"
-      className="py-20 lg:py-28"
+      className="py-20 lg:py-28 relative overflow-hidden"
       style={{ background: "var(--beige-light)" }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="max-w-xl mb-14">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+        <div className="max-w-xl mb-14 text-center mx-auto">
+          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[rgba(35,69,44,0.08)]">
             <span
-              className="text-xs font-medium tracking-widest uppercase"
-              style={{ color: "var(--sage-green)" }}
+              className="text-xs font-semibold tracking-widest uppercase"
+              style={{ color: "var(--dark-green)" }}
             >
-                  href={`tel:+${p.phone}`}
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
-                  style={{ background: "rgba(35,69,44,0.08)", color: "var(--dark-green)" }}
-                >
-                  <IconPhone />
-                </a>
-                <a
-                  href={`mailto:desa.${DESA_NAME.toLowerCase()}@${KABUPATEN.toLowerCase()}.go.id`}
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
-                  style={{ background: "rgba(123,146,117,0.12)", color: "var(--sage-green)" }}
-                >
-                  <IconMail />
-                </a>
-              </div>
+              Struktur Organisasi
+            </span>
+          </div>
+          <h2
+            className="font-serif font-bold leading-tight"
+            style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.75rem)", color: "var(--charcoal)" }}
+          >
+            Bagan Perangkat Desa {DESA_NAME}
+          </h2>
+          <p className="text-sm mt-3" style={{ color: "rgba(32,37,32,0.7)" }}>
+            Struktur hierarki kepemimpinan dan tata kelola pelayanan masyarakat Desa {DESA_NAME}
+          </p>
+        </div>
+
+        {/* FLOWCHART HIERARCHY TREE */}
+        <div className="flex flex-col items-center w-full max-w-5xl mx-auto">
+          
+          {/* LEVEL 1: KEPALA DESA (Top Level) */}
+          <div className="w-full max-w-xs z-10">
+            <OfficialCard
+              p={KEPALA_DESA}
+              isFeatured={true}
+              badgeBg="var(--dark-green)"
+              badgeColor="#ffffff"
+            />
+          </div>
+
+          {/* CONNECTOR LINE LEVEL 1 -> LEVEL 2 */}
+          <ConnectorVertical />
+
+          {/* LEVEL 2: SEKRETARIS DESA (Second Level) */}
+          <div className="w-full max-w-xs z-10">
+            <OfficialCard
+              p={SEKRETARIS_DESA}
+              isFeatured={false}
+              badgeBg="var(--sage-green)"
+              badgeColor="#ffffff"
+            />
+          </div>
+
+          {/* CONNECTOR BRANCHING LEVEL 2 -> LEVEL 3 */}
+          <div className="w-full flex flex-col items-center my-2">
+            {/* Vertical stem from Sekdes */}
+            <div className="w-0.5 h-6 bg-[var(--sage-green)]" />
+            
+            {/* Desktop Horizontal Line connecting 3 columns */}
+            <div className="hidden md:block w-3/4 h-0.5 bg-[var(--sage-green)] relative">
+              <div className="absolute left-0 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
+              <div className="absolute right-0 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
             </div>
-          ))}
+
+            {/* Mobile Vertical Stem */}
+            <div className="md:hidden w-0.5 h-6 bg-[var(--sage-green)]" />
+          </div>
+
+          {/* LEVEL 3: KAUR (3 Columns) */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-2">
+            {KAUR_LIST.map((kaur) => (
+              <div key={kaur.jabatan} className="w-full">
+                <OfficialCard
+                  p={kaur}
+                  isFeatured={false}
+                  badgeBg="rgba(216,203,168,0.7)"
+                  badgeColor="var(--charcoal)"
+                />
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
