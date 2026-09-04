@@ -295,12 +295,72 @@ function Hero() {
   );
 }
 
+// ─── Sambutan Kepala Desa ───────────────────────────────────────────────────
+
+function SambutanKepalaDesa() {
+  return (
+    <section className="py-16 lg:py-20" style={{ background: "var(--beige-light)" }}>
+      <div className="max-w-5xl mx-auto px-6 lg:px-12">
+        <div
+          className="grid lg:grid-cols-[260px_1fr] gap-8 lg:gap-12 items-center p-7 lg:p-10 rounded-2xl"
+          style={{
+            background: "var(--off-white)",
+            border: "1px solid rgba(216,203,168,0.7)",
+            boxShadow: "0 12px 35px rgba(35,69,44,0.08)",
+          }}
+        >
+          <div className="text-center">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&h=640&fit=crop&auto=format"
+              alt="Foto Kepala Desa Selorejo"
+              className="w-44 h-52 lg:w-56 lg:h-64 object-cover rounded-xl mx-auto"
+              style={{ boxShadow: "0 10px 25px rgba(35,69,44,0.16)" }}
+            />
+            <p className="font-serif font-semibold text-lg mt-4" style={{ color: "var(--dark-green)" }}>
+              Bapak JUMADI
+            </p>
+            <p className="text-xs mt-1" style={{ color: "var(--sage-green)" }}>
+              Kepala Desa {DESA_NAME}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
+              <span
+                className="text-xs font-medium tracking-widest uppercase"
+                style={{ color: "var(--sage-green)" }}
+              >
+                Sambutan Kepala Desa
+              </span>
+            </div>
+            <h2
+              className="font-serif font-bold leading-tight mb-5"
+              style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--charcoal)" }}
+            >
+              Selamat Datang di Desa {DESA_NAME}
+            </h2>
+            <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(32,37,32,0.75)" }}>
+              Assalamu&apos;alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa {DESA_NAME}.
+              Website ini hadir sebagai ruang informasi dan pelayanan bagi seluruh masyarakat.
+            </p>
+            <p className="text-base leading-relaxed" style={{ color: "rgba(32,37,32,0.75)" }}>
+              Mari bersama-sama menjaga semangat gotong royong, mengembangkan potensi desa, dan mewujudkan
+              Desa {DESA_NAME} yang maju, mandiri, serta sejahtera. Wassalamu&apos;alaikum warahmatullahi wabarakatuh.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Stats ───────────────────────────────────────────────────────────────────
 
 const STATS = [
   { icon: "👥", value: "1.245", label: "Penduduk", sublabel: "Jiwa" },
   { icon: "🗺️", value: "320", label: "Luas Wilayah", sublabel: "Hektare" },
-  { icon: "🏘️", value: "4", label: "Dusun", sublabel: "Wilayah" },
+  { icon: "🏘️", value: "3", label: "Dusun", sublabel: "Wilayah" },
   { icon: "🛒", value: "15", label: "UMKM", sublabel: "Aktif" },
 ];
 
@@ -344,7 +404,7 @@ const ABOUT_INFO = [
   { label: "Kabupaten", value: KABUPATEN },
   { label: "Provinsi", value: PROVINSI },
   { label: "Luas Wilayah", value: "320 Hektare" },
-  { label: "Jumlah Dusun", value: "4 Dusun" },
+  { label: "Jumlah Dusun", value: "3 Dusun" },
 ];
 
 function About() {
@@ -1290,6 +1350,7 @@ export default function App() {
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
       <Navbar />
       <Hero />
+      <SambutanKepalaDesa />
       <Stats />
       <About />
       <Potensi />
