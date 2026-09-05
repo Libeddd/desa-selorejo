@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// 1. Ini bagian terpenting: Memanggil komponen Navbar yang baru saja dibuat
+import Navbar from "@/components/Navbar"; 
+
 export const metadata: Metadata = {
   title: {
     template: "%s | Desa Selorejo",
@@ -31,8 +34,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        {children}
+      <body suppressHydrationWarning className="flex flex-col min-h-screen">
+        
+        {/* 2. Meletakkan Navbar di paling atas body agar muncul di semua halaman */}
+        <Navbar />
+        
+        {/* 3. Konten halaman akan muncul di bawah Navbar */}
+        <main className="flex-grow bg-gray-50">
+          {children}
+        </main>
+        
       </body>
     </html>
   );

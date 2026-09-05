@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { useState, useEffect, useRef } from "react";
 
 const DESA_NAME = "Selorejo";
@@ -89,110 +91,6 @@ function IconYoutube({ size = 20 }: { size?: number }) {
 
 // ─── Navbar ─────────────────────────────────────────────────────────────────
 
-const NAV_LINKS = ["Beranda", "Tentang Desa", "UMKM", "Perangkat Desa", "Kontak"];
-
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id.toLowerCase().replace(/ /g, "-"));
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false);
-  };
-
-  return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-      style={{
-        background: scrolled ? "rgba(248,247,242,0.97)" : "transparent",
-        backdropFilter: scrolled ? "blur(10px)" : "none",
-        boxShadow: scrolled ? "0 1px 20px rgba(35,69,44,0.08)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(216,203,168,0.4)" : "none",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20">
-        {/* Logo */}
-        <button onClick={() => scrollTo("beranda")} className="flex items-center gap-3 group">
-          <span
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold block"
-            style={{ background: "var(--dark-green)" }}
-          >
-            DS
-          </span>
-          <span className="text-left block">
-            <span
-              className="font-serif font-semibold text-base leading-tight block"
-              style={{ color: scrolled ? "var(--dark-green)" : "#fff" }}
-            >
-              Desa {DESA_NAME}
-            </span>
-            <span
-              className="text-xs leading-none block"
-              style={{ color: scrolled ? "var(--sage-green)" : "rgba(255,255,255,0.75)" }}
-            >
-              {KECAMATAN} · {KABUPATEN}
-            </span>
-          </span>
-        </button>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link}
-              onClick={() => scrollTo(link)}
-              className="text-sm font-medium transition-colors duration-200 hover:opacity-70"
-              style={{ color: scrolled ? "var(--charcoal)" : "rgba(255,255,255,0.9)" }}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden p-2 transition-opacity hover:opacity-70"
-          style={{ color: scrolled ? "var(--dark-green)" : "#fff" }}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <IconX /> : <IconMenu />}
-        </button>
-      </div>
-
-      {/* Mobile drawer */}
-      {menuOpen && (
-        <div
-          className="md:hidden absolute top-full left-0 right-0 py-4 px-6"
-          style={{
-            background: "rgba(248,247,242,0.98)",
-            backdropFilter: "blur(10px)",
-            borderBottom: "1px solid rgba(216,203,168,0.4)",
-            boxShadow: "0 8px 30px rgba(35,69,44,0.1)",
-          }}
-        >
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link}
-              onClick={() => scrollTo(link)}
-              className="block w-full text-left py-3 text-sm font-medium border-b last:border-b-0"
-              style={{ color: "var(--charcoal)", borderColor: "rgba(216,203,168,0.4)" }}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-      )}
-    </nav>
-  );
-}
-
 // ─── Hero ────────────────────────────────────────────────────────────────────
 
 function Hero() {
@@ -200,13 +98,14 @@ function Hero() {
     <section
       id="beranda"
       className="relative w-full min-h-screen flex items-center"
-      style={{ background: "var(--dark-green)" }}
+      style={{ background: "var(--dark-green, #1e3f20)" }}
     >
       <img
         src="https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=900&fit=crop&auto=format"
-        alt="Lanskap Desa Sumbermulyo yang hijau dan asri"
+        alt="Lanskap Desa Selorejo yang hijau dan asri"
         className="absolute inset-0 w-full h-full object-cover"
       />
+      
       {/* Gradient overlay */}
       <div
         className="absolute inset-0"
@@ -229,13 +128,13 @@ function Hero() {
           <div className="flex items-center gap-3 mb-6">
             <div
               className="h-px w-10"
-              style={{ background: "var(--beige)" }}
+              style={{ background: "var(--beige, #f5f5dc)" }}
             />
             <span
               className="text-xs font-medium tracking-widest uppercase"
-              style={{ color: "var(--beige)" }}
+              style={{ color: "var(--beige, #f5f5dc)" }}
             >
-              {KECAMATAN} · {KABUPATEN} · {PROVINSI}
+              Kecamatan Kawedanan · Kabupaten Magetan · Jawa Timur
             </span>
           </div>
 
@@ -248,7 +147,7 @@ function Hero() {
               textShadow: "0 2px 20px rgba(0,0,0,0.3)",
             }}
           >
-            Desa<br />{DESA_NAME}
+            Desa<br />Selorejo
           </h1>
 
           <p
@@ -262,14 +161,17 @@ function Hero() {
             <button
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
               style={{
-                background: "var(--dark-green)",
+                background: "var(--dark-green, #1e3f20)",
                 color: "#fff",
-                border: "2px solid var(--dark-green)",
+                border: "2px solid var(--dark-green, #1e3f20)",
                 boxShadow: "0 4px 20px rgba(35,69,44,0.4)",
               }}
               onClick={() => document.getElementById("potensi-desa")?.scrollIntoView({ behavior: "smooth" })}
             >
-              Jelajahi Desa <IconArrowRight />
+              Jelajahi Desa
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
             </button>
             <button
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
@@ -284,12 +186,6 @@ function Hero() {
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-        <span className="text-white text-xs tracking-widest uppercase">Scroll</span>
-        <div className="w-px h-10 bg-white/40 animate-pulse" />
       </div>
     </section>
   );
@@ -1233,6 +1129,7 @@ function Kontak() {
               <IconWhatsApp size={16} /> Hubungi Kami
             </button>
           </div>
+
           
         </div>
       </div>
@@ -1270,23 +1167,37 @@ function Footer() {
             </p>
           </div>
 
-          {/* Col 2 – navigasi */}
+         {/* Col 2 – Navigasi */}
           <div>
             <h4 className="text-xs font-semibold tracking-widest uppercase mb-5" style={{ color: "rgba(248,247,242,0.45)" }}>
               Navigasi
             </h4>
             <ul className="space-y-3">
-              {NAV_LINKS.map((link) => (
-                <li key={link}>
-                  <button
-                    onClick={() => scrollTo(link)}
-                    className="text-sm transition-opacity hover:opacity-70"
-                    style={{ color: "rgba(248,247,242,0.75)" }}
-                  >
-                    {link}
-                  </button>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Beranda
+                </Link>
+              </li>
+              <li>
+                <Link href="/tentang-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Tentang Desa
+                </Link>
+              </li>
+              <li>
+                <Link href="/umkm" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  UMKM
+                </Link>
+              </li>
+              <li>
+                <Link href="/perangkat-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Perangkat Desa
+                </Link>
+              </li>
+              <li>
+                <Link href="/kontak" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Kontak
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -1338,7 +1249,7 @@ function Footer() {
 export default function App() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <Navbar />
+      {/* Baris <Navbar /> sudah dihapus dari sini */}
       <Hero />
       <SambutanKepalaDesa />
       <Stats />
