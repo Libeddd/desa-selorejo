@@ -473,32 +473,38 @@ function About() {
             </button>
           </div>
 
-          {/* Right – photo */}
+          {/* Right – peta desa */}
           <div className="relative">
+            <h3
+              className="font-serif font-bold text-2xl mb-4"
+              style={{ color: "var(--charcoal)" }}
+            >
+              Peta Desa
+            </h3>
+
             <div
-              className="absolute -top-4 -left-4 w-full h-full rounded-2xl"
-              style={{ background: "var(--beige)", opacity: 0.4 }}
-            />
-            <img
-              src="https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?w=800&h=600&fit=crop&auto=format"
-              alt="Pemandangan aerial Desa Sumbermulyo yang indah"
-              className="relative w-full aspect-[4/3] object-cover rounded-2xl"
-              style={{ boxShadow: "0 20px 60px rgba(35,69,44,0.2)" }}
-            />
-            <div
-              className="absolute bottom-6 left-6 right-6 py-4 px-5 rounded-xl"
+              className="w-full aspect-[4/3] rounded-2xl overflow-hidden"
               style={{
-                background: "rgba(248,247,242,0.95)",
-                backdropFilter: "blur(8px)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                border: "1px solid rgba(216,203,168,0.6)",
+                boxShadow: "0 20px 60px rgba(35,69,44,0.2)",
               }}
             >
-              <div className="font-serif font-semibold text-base" style={{ color: "var(--dark-green)" }}>
-                Desa {DESA_NAME}
-              </div>
-              <div className="text-xs mt-0.5" style={{ color: "var(--sage-green)" }}>
-                {KECAMATAN}, {KABUPATEN}, {PROVINSI}
-              </div>
+              <iframe
+                title="Peta Desa Selorejo"
+                src="https://maps.google.com/maps?q=Desa+Selorejo,+Kecamatan+Kawedanan,+Kabupaten+Magetan,+Jawa+Timur&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-none"
+                loading="lazy"
+              />
+            </div>
+
+            <div
+              className="mt-4 py-4 px-5 rounded-xl"
+              style={{
+                background: "rgba(216,203,168,0.18)",
+                color: "var(--sage-green)",
+              }}
+            >
+              Desa {DESA_NAME}, {KECAMATAN}, {KABUPATEN}, {PROVINSI}
             </div>
           </div>
         </div>
@@ -904,7 +910,7 @@ function Umkm() {
             </span>
           </div>
           <h2
-            className="font-serif font-bold leading-tight mb-3"
+            className="font-serif font-bold leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3vw, 2.75rem)", color: "var(--charcoal)" }}
           >
             UMKM Unggulan Desa
@@ -1227,23 +1233,7 @@ function Kontak() {
               <IconWhatsApp size={16} /> Hubungi Kami
             </button>
           </div>
-
-          {/* Maps placeholder */}
-          <div
-            className="w-full aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center"
-            style={{
-              background: "rgba(123,146,117,0.15)",
-              border: "1px solid rgba(216,203,168,0.6)",
-              boxShadow: "0 8px 30px rgba(35,69,44,0.1)",
-            }}
-          >
-            <iframe
-              title="Lokasi Kantor Desa Sumbermulyo"
-              src="https://maps.google.com/maps?q=Kawedanan+Magetan+Jawa+Timur&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-full border-none"
-              loading="lazy"
-            />
-          </div>
+          
         </div>
       </div>
     </section>
