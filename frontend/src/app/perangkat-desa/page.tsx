@@ -1,8 +1,8 @@
 export default function PerangkatDesa() {
   // Data dummy perangkat desa (Bisa diganti dengan data asli)
   const PERANGKAT = [
-    { nama: "Budi Santoso", jabatan: "Kepala Desa", foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop" },
-    { nama: "Siti Aminah", jabatan: "Sekretaris Desa", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" },
+    { nama: "Abid Sunaryo", jabatan: "Kepala Desa", foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop" },
+    { nama: "Desta Berlianda", jabatan: "Sekretaris Desa", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" },
     { nama: "Ahmad Fauzi", jabatan: "Kaur Keuangan", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" },
     { nama: "Ratna Sari", jabatan: "Kaur Perencanaan", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" },
     { nama: "Joko Widodo", jabatan: "Kasi Pemerintahan", foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" },

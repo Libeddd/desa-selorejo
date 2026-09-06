@@ -170,20 +170,20 @@ function Hero() {
             >
               Jelajahi Desa
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
               </svg>
             </button>
-            <button
-              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+            <Link
+              href="/tentang-desa"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 inline-flex hover:-translate-y-0.5"
               style={{
                 background: "transparent",
                 color: "#fff",
                 border: "2px solid rgba(255,255,255,0.6)",
               }}
-              onClick={() => document.getElementById("tentang-desa")?.scrollIntoView({ behavior: "smooth" })}
             >
               Tentang Desa
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -357,8 +357,9 @@ function About() {
               ))}
             </div>
 
-            <button
-              className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+           <Link
+              href="/tentang-desa"
+              className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
               style={{
                 border: "2px solid var(--dark-green)",
                 color: "var(--dark-green)",
@@ -366,9 +367,8 @@ function About() {
               }}
             >
               Selengkapnya
-            </button>
+            </Link>
           </div>
-
           {/* Right – peta desa */}
           <div className="relative">
             <h3
@@ -394,13 +394,28 @@ function About() {
             </div>
 
             <div
-              className="mt-4 py-4 px-5 rounded-xl"
+              className="mt-4 py-4 px-5 rounded-xl text-center md:text-left"
               style={{
                 background: "rgba(216,203,168,0.18)",
                 color: "var(--sage-green)",
               }}
             >
               Desa {DESA_NAME}, {KECAMATAN}, {KABUPATEN}, {PROVINSI}
+            </div>
+
+            {/* Tambahan Tombol Peta Desa */}
+            <div className="mt-6 flex md:justify-start justify-center">
+              <Link
+                href="/peta-desa"
+                className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
+                style={{
+                  border: "2px solid var(--dark-green, #1e3f20)",
+                  color: "var(--dark-green, #1e3f20)",
+                  background: "transparent",
+                }}
+              >
+                Jelajahi Peta Desa
+              </Link>
             </div>
           </div>
         </div>
@@ -795,6 +810,8 @@ function Umkm() {
   return (
     <section id="umkm" className="py-20 lg:py-28" style={{ background: "var(--off-white)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        
+        {/* Bagian Judul */}
         <div className="max-w-xl mb-14">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
@@ -816,11 +833,44 @@ function Umkm() {
           </p>
         </div>
 
+        {/* Bagian Grid Kartu UMKM */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {UMKM_DATA.map((u) => (
             <UmkmCard key={u.id} umkm={u} onDetail={() => setSelected(u)} />
           ))}
         </div>
+
+        {/* ========================================= */}
+        {/* TAMBAHAN TOMBOL SELENGKAPNYA DI SINI */}
+        {/* ========================================= */}
+        <div className="mt-12 flex justify-center w-full">
+          <Link
+            href="/umkm"
+            className="px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg inline-flex items-center gap-2 group"
+            style={{
+              border: "2px solid var(--dark-green, #1e3f20)",
+              color: "var(--dark-green, #1e3f20)",
+              background: "transparent",
+            }}
+          >
+            Selengkapnya
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="18" 
+              height="18" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
+        </div>
+
       </div>
 
       {selected && <UmkmModal umkm={selected} onClose={() => setSelected(null)} />}
