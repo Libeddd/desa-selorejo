@@ -4,6 +4,7 @@ import "./globals.css";
 // 1. Memanggil komponen dengan tanda ./ (karena folder components ada di sebelah file ini)
 import Navbar from "../components/Navbar"; 
 import HideOnAdmin from "../components/HideOnAdmin";
+import FloatingActionButton from "../components/FloatingActionButton";
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +41,7 @@ export default function RootLayout({
         {/* Navbar dibungkus penjaga agar tidak muncul di halaman Admin */}
         <HideOnAdmin>
           <Navbar />
+          <FloatingActionButton />
         </HideOnAdmin>
         
         {/* Konten halaman utama */}

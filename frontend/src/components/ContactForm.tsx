@@ -100,7 +100,7 @@ export default function ContactForm({ phone }: ContactFormProps) {
         </label>
         <input
           name="nohp"
-          type="text"
+          type="tel"
           required
           disabled={loading}
           inputMode="numeric"
@@ -108,7 +108,7 @@ export default function ContactForm({ phone }: ContactFormProps) {
             const cleaned = handlePhoneChange(e.target.value);
             e.target.value = cleaned;
           }}
-          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 outline-none transition-all disabled:opacity-60 ${phoneError ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-gray-200 focus:ring-[#6b8e6b]"}`}
+          className={`w-full px-4 min-h-[44px] py-3 border rounded-xl focus:ring-2 outline-none transition-all disabled:opacity-60 ${phoneError ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-gray-200 focus:ring-[#6b8e6b]"}`}
           placeholder="Contoh: 08123456789 (hanya angka)"
         />
         {phoneError && <p className="text-xs text-red-500 mt-1">{phoneError}</p>}

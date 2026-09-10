@@ -249,14 +249,27 @@ function SambutanKepalaDesa() {
             >
               Selamat Datang di Desa {DESA_NAME}
             </h2>
-            <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(32,37,32,0.75)" }}>
-              Assalamu&apos;alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa {DESA_NAME}.
-              Website ini hadir sebagai ruang informasi dan pelayanan bagi seluruh masyarakat.
-            </p>
-            <p className="text-base leading-relaxed" style={{ color: "rgba(32,37,32,0.75)" }}>
-              Mari bersama-sama menjaga semangat gotong royong, mengembangkan potensi desa, dan mewujudkan
-              Desa {DESA_NAME} yang maju, mandiri, serta sejahtera. Wassalamu&apos;alaikum warahmatullahi wabarakatuh.
-            </p>
+            <div className="text-base leading-relaxed mb-4 md:mb-6" style={{ color: "rgba(32,37,32,0.75)" }}>
+              <p className="mb-4">
+                Assalamu&apos;alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa {DESA_NAME}.
+                Website ini hadir sebagai ruang informasi dan pelayanan bagi seluruh masyarakat.
+              </p>
+              <p className="hidden md:block">
+                Mari bersama-sama menjaga semangat gotong royong, mengembangkan potensi desa, dan mewujudkan
+                Desa {DESA_NAME} yang maju, mandiri, serta sejahtera. Wassalamu&apos;alaikum warahmatullahi wabarakatuh.
+              </p>
+            </div>
+            <Link
+              href="/tentang-desa"
+              className="md:hidden flex items-center justify-center w-full min-h-[44px] px-6 py-3 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+              style={{
+                border: "2px solid var(--dark-green)",
+                color: "var(--dark-green)",
+                background: "transparent",
+              }}
+            >
+              Baca Selengkapnya
+            </Link>
           </div>
         </div>
       </div>
@@ -357,12 +370,14 @@ function About() {
             >
               Tentang Desa<br />{DESA_NAME}
             </h2>
-            <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(32,37,32,0.75)" }}>
-              Desa {DESA_NAME} adalah desa yang terletak di Kecamatan {KECAMATAN}, Kabupaten {KABUPATEN}, Provinsi {PROVINSI}. Desa ini dikenal dengan keindahan alamnya yang asri, kekayaan budaya lokal, serta potensi pertanian dan perkebunan yang melimpah.
-            </p>
-            <p className="text-base leading-relaxed mb-8" style={{ color: "rgba(32,37,32,0.75)" }}>
-              Dengan semangat gotong royong dan kepemimpinan yang visioner, Desa {DESA_NAME} terus berkembang menjadi desa mandiri yang mampu memberdayakan seluruh potensi masyarakatnya menuju kehidupan yang lebih sejahtera.
-            </p>
+            <div className="text-base leading-relaxed mb-6 md:mb-8" style={{ color: "rgba(32,37,32,0.75)" }}>
+              <p className="mb-4">
+                Desa {DESA_NAME} adalah desa yang terletak di Kecamatan {KECAMATAN}, Kabupaten {KABUPATEN}, Provinsi {PROVINSI}. Desa ini dikenal dengan keindahan alamnya yang asri, kekayaan budaya lokal, serta potensi pertanian dan perkebunan yang melimpah.
+              </p>
+              <p className="hidden md:block">
+                Dengan semangat gotong royong dan kepemimpinan yang visioner, Desa {DESA_NAME} terus berkembang menjadi desa mandiri yang mampu memberdayakan seluruh potensi masyarakatnya menuju kehidupan yang lebih sejahtera.
+              </p>
+            </div>
 
             {/* Info grid */}
             <div
@@ -391,7 +406,7 @@ function About() {
 
            <Link
               href="/tentang-desa"
-              className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
+              className="hidden md:inline-flex px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 border: "2px solid var(--dark-green)",
                 color: "var(--dark-green)",
@@ -439,7 +454,7 @@ function About() {
             <div className="mt-6 flex md:justify-start justify-center">
               <Link
                 href="/peta-desa"
-                className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
+                className="w-full md:w-auto flex justify-center items-center px-7 min-h-[44px] rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
                 style={{
                   border: "2px solid var(--dark-green, #1e3f20)",
                   color: "var(--dark-green, #1e3f20)",
