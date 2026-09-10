@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: {
@@ -31,8 +32,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        {children}
+      <body suppressHydrationWarning className="flex flex-col min-h-screen">
+        {/* Navbar global - muncul di semua halaman */}
+        <Navbar />
+
+        {/* Konten halaman */}
+        <main className="flex-grow">
+          {children}
+        </main>
       </body>
     </html>
   );
