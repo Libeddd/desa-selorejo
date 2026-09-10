@@ -45,6 +45,14 @@ export default function Navbar() {
               Perangkat Desa
             </Link>
           </li>
+          
+          {/* Menu Berita yang baru ditambahkan */}
+          <li>
+            <Link href="/berita" className={isActive("/berita")}>
+              Berita
+            </Link>
+          </li>
+
           <li>
             <Link href="/kontak" className={isActive("/kontak")}>
               Kontak
