@@ -8,7 +8,7 @@ export default function Navbar() {
 
   // Fungsi pembantu untuk menentukan gaya menu yang aktif
   const isActive = (path: string) => {
-    return pathname === path
+    return pathname === path 
       ? "text-white font-bold border-b-2 border-white pb-1" // Style jika sedang di halaman ini
       : "text-white/80 hover:text-white transition-colors";   // Style default
   };
@@ -17,7 +17,7 @@ export default function Navbar() {
     // Background transparan agar menyatu dengan gambar latar belakang
     <nav className="absolute top-0 w-full z-50 p-6">
       <div className="container mx-auto flex justify-center">
-
+        
         {/* Deretan Menu Navigasi */}
         <ul className="flex flex-wrap justify-center gap-6 md:gap-8 text-base md:text-lg font-medium drop-shadow-md">
           <li>
@@ -45,6 +45,14 @@ export default function Navbar() {
               Perangkat Desa
             </Link>
           </li>
+          
+          {/* Menu Berita yang baru ditambahkan */}
+          <li>
+            <Link href="/berita" className={isActive("/berita")}>
+              Berita
+            </Link>
+          </li>
+
           <li>
             <Link href="/kontak" className={isActive("/kontak")}>
               Kontak

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+
+// 1. Memanggil komponen dengan tanda ./ (karena folder components ada di sebelah file ini)
+import Navbar from "../components/Navbar"; 
+import HideOnAdmin from "../components/HideOnAdmin";
 
 export const metadata: Metadata = {
   title: {
@@ -33,13 +36,17 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <body suppressHydrationWarning className="flex flex-col min-h-screen">
-        {/* Navbar global - muncul di semua halaman */}
-        <Navbar />
-
-        {/* Konten halaman */}
-        <main className="flex-grow">
+        
+        {/* Navbar dibungkus penjaga agar tidak muncul di halaman Admin */}
+        <HideOnAdmin>
+          <Navbar />
+        </HideOnAdmin>
+        
+        {/* Konten halaman utama */}
+        <main className="flex-grow bg-gray-50">
           {children}
         </main>
+        
       </body>
     </html>
   );

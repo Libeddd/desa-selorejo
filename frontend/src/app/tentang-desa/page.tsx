@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "next/link"; // Import ini untuk menyambungkan ke halaman Perangkat Desa
 
 export const metadata: Metadata = {
   title: "Tentang Desa",
@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 export default function TentangDesaPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
-
-      {/* Header / Banner */}
-      <div
-        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center"
+      
+      {/* Header / Banner - Selaras dengan halaman lainnya */}
+      <div 
+        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center" 
         style={{ background: "var(--dark-green, #1e3f20)" }}
       >
         <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
@@ -27,15 +27,15 @@ export default function TentangDesaPage() {
 
       {/* Konten Utama */}
       <div className="max-w-6xl mx-auto px-6 lg:px-12 -mt-8 relative z-10 space-y-8 lg:space-y-12">
-
-        {/* Section 1: Selayang Pandang */}
+        
+        {/* Section 1: Selayang Pandang (Pengantar) */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10">
-          <h2 className="text-2xl font-serif font-bold mb-4" style={{ color: "var(--dark-green, #1e3f20)" }}>
-            Selayang Pandang
-          </h2>
-          <p className="text-gray-600 leading-relaxed text-lg">
-            Desa Selorejo merupakan salah satu desa yang terletak di Kecamatan Kawedanan, Kabupaten Magetan, Provinsi Jawa Timur. Dengan kekayaan alam dan semangat gotong royong yang tinggi, desa ini terus berkembang menjadi desa yang mandiri, berdaya saing, dan tetap memegang teguh kearifan lokal.
-          </p>
+           <h2 className="text-2xl font-serif font-bold mb-4" style={{ color: "var(--dark-green, #1e3f20)" }}>
+             Selayang Pandang
+           </h2>
+           <p className="text-gray-600 leading-relaxed text-lg">
+             Desa Selorejo merupakan salah satu desa yang terletak di Kecamatan Kawedanan, Kabupaten Magetan, Provinsi Jawa Timur. Dengan kekayaan alam dan semangat gotong royong yang tinggi, desa ini terus berkembang menjadi desa yang mandiri, berdaya saing, dan tetap memegang teguh kearifan lokal.
+           </p>
         </div>
 
         {/* Section 2: Visi dan Misi */}
@@ -47,7 +47,7 @@ export default function TentangDesaPage() {
             </div>
             <h2 className="text-2xl font-serif font-bold mb-4" style={{ color: "var(--dark-green, #1e3f20)" }}>Visi</h2>
             <p className="text-gray-700 text-xl font-medium leading-relaxed italic">
-              &quot;Mewujudkan Desa Selorejo yang maju, mandiri, dan sejahtera berlandaskan nilai-nilai gotong royong.&quot;
+              "Mewujudkan Desa Selorejo yang maju, mandiri, dan sejahtera berlandaskan nilai-nilai gotong royong."
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export default function TentangDesaPage() {
           <h2 className="text-2xl font-serif font-bold mb-8" style={{ color: "var(--dark-green, #1e3f20)" }}>
             Struktur Pemerintahan Desa
           </h2>
-
+          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
             {[
               "Kepala Desa",
@@ -90,6 +90,7 @@ export default function TentangDesaPage() {
             ].map((jabatan, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div className="w-20 h-20 bg-gray-50 rounded-full mb-4 border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">
+                  {/* Ikon User Placeholder */}
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
                 <p className="text-sm font-bold text-gray-800 mb-1">Nama Pejabat</p>
@@ -97,8 +98,9 @@ export default function TentangDesaPage() {
               </div>
             ))}
           </div>
-
-          <Link
+          
+          {/* Tombol yang mengarah ke halaman Perangkat Desa */}
+          <Link 
             href="/perangkat-desa"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             style={{ background: "var(--dark-green, #1e3f20)", color: "white" }}

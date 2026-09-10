@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 export default function PetaDesaPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
-
+      
       {/* Header / Banner */}
-      <div
-        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center"
+      <div 
+        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center" 
         style={{ background: "var(--dark-green, #1e3f20)" }}
       >
         <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
@@ -26,7 +26,7 @@ export default function PetaDesaPage() {
       {/* Konten Utama */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-0 relative z-10">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 lg:p-6">
-
+          
           {/* Frame Google Maps */}
           <div className="w-full aspect-square md:aspect-[21/9] rounded-xl overflow-hidden bg-gray-100 relative shadow-inner">
             <iframe
@@ -41,7 +41,7 @@ export default function PetaDesaPage() {
             ></iframe>
           </div>
 
-          {/* Informasi Tambahan */}
+          {/* Informasi Tambahan (Opsional) */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center lg:text-left px-4 lg:px-8 pb-4">
             <div className="p-5 rounded-2xl bg-gray-50 border border-gray-100 transition-colors hover:bg-green-50/50">
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 md:mx-0 mx-auto" style={{ background: "rgba(30,63,32,0.08)", color: "var(--dark-green, #1e3f20)" }}>
@@ -52,7 +52,7 @@ export default function PetaDesaPage() {
                 Terletak di Kecamatan Kawedanan, memudahkan akses ke berbagai fasilitas publik di Kabupaten Magetan.
               </p>
             </div>
-
+            
             <div className="p-5 rounded-2xl bg-gray-50 border border-gray-100 transition-colors hover:bg-green-50/50">
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 md:mx-0 mx-auto" style={{ background: "rgba(30,63,32,0.08)", color: "var(--dark-green, #1e3f20)" }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
