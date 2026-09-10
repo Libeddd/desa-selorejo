@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
             {/* Input Email */}
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-2">
-                Username / Email
+                Email
               </label>
               <input
                 type="email"
@@ -84,7 +84,7 @@ export default function AdminLoginPage() {
                 required
                 disabled={loading}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20] disabled:opacity-60"
-                placeholder="admin@selorejo.desa.id"
+                placeholder="Masukkan email Anda"
               />
             </div>
 
@@ -101,7 +101,7 @@ export default function AdminLoginPage() {
                   required
                   disabled={loading}
                   className="w-full pl-4 pr-24 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20] disabled:opacity-60"
-                  placeholder="••••••••"
+                  placeholder="Masukkan password Anda"
                 />
                 <button
                   type="button"
@@ -129,16 +129,6 @@ export default function AdminLoginPage() {
               {loading ? "Memproses..." : "Masuk"}
             </button>
           </form>
-
-          {/* Lupa Password */}
-          <div className="mt-6 text-center">
-            <Link 
-              href="#" 
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors underline underline-offset-4"
-            >
-              Lupa Password?
-            </Link>
-          </div>
 
         </div>
       </div>
