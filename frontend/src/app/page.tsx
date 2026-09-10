@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { useState, useEffect, useRef } from "react";
 
 const DESA_NAME = "Selorejo";
@@ -89,110 +91,6 @@ function IconYoutube({ size = 20 }: { size?: number }) {
 
 // ─── Navbar ─────────────────────────────────────────────────────────────────
 
-const NAV_LINKS = ["Beranda", "Tentang Desa", "UMKM", "Perangkat Desa", "Kontak"];
-
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id.toLowerCase().replace(/ /g, "-"));
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false);
-  };
-
-  return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-      style={{
-        background: scrolled ? "rgba(248,247,242,0.97)" : "transparent",
-        backdropFilter: scrolled ? "blur(10px)" : "none",
-        boxShadow: scrolled ? "0 1px 20px rgba(35,69,44,0.08)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(216,203,168,0.4)" : "none",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20">
-        {/* Logo */}
-        <button onClick={() => scrollTo("beranda")} className="flex items-center gap-3 group">
-          <span
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold block"
-            style={{ background: "var(--dark-green)" }}
-          >
-            DS
-          </span>
-          <span className="text-left block">
-            <span
-              className="font-serif font-semibold text-base leading-tight block"
-              style={{ color: scrolled ? "var(--dark-green)" : "#fff" }}
-            >
-              Desa {DESA_NAME}
-            </span>
-            <span
-              className="text-xs leading-none block"
-              style={{ color: scrolled ? "var(--sage-green)" : "rgba(255,255,255,0.75)" }}
-            >
-              {KECAMATAN} · {KABUPATEN}
-            </span>
-          </span>
-        </button>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link}
-              onClick={() => scrollTo(link)}
-              className="text-sm font-medium transition-colors duration-200 hover:opacity-70"
-              style={{ color: scrolled ? "var(--charcoal)" : "rgba(255,255,255,0.9)" }}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden p-2 transition-opacity hover:opacity-70"
-          style={{ color: scrolled ? "var(--dark-green)" : "#fff" }}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <IconX /> : <IconMenu />}
-        </button>
-      </div>
-
-      {/* Mobile drawer */}
-      {menuOpen && (
-        <div
-          className="md:hidden absolute top-full left-0 right-0 py-4 px-6"
-          style={{
-            background: "rgba(248,247,242,0.98)",
-            backdropFilter: "blur(10px)",
-            borderBottom: "1px solid rgba(216,203,168,0.4)",
-            boxShadow: "0 8px 30px rgba(35,69,44,0.1)",
-          }}
-        >
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link}
-              onClick={() => scrollTo(link)}
-              className="block w-full text-left py-3 text-sm font-medium border-b last:border-b-0"
-              style={{ color: "var(--charcoal)", borderColor: "rgba(216,203,168,0.4)" }}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-      )}
-    </nav>
-  );
-}
-
 // ─── Hero ────────────────────────────────────────────────────────────────────
 
 function Hero() {
@@ -200,13 +98,14 @@ function Hero() {
     <section
       id="beranda"
       className="relative w-full min-h-screen flex items-center"
-      style={{ background: "var(--dark-green)" }}
+      style={{ background: "var(--dark-green, #1e3f20)" }}
     >
       <img
         src="https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=900&fit=crop&auto=format"
-        alt="Lanskap Desa Sumbermulyo yang hijau dan asri"
+        alt="Lanskap Desa Selorejo yang hijau dan asri"
         className="absolute inset-0 w-full h-full object-cover"
       />
+      
       {/* Gradient overlay */}
       <div
         className="absolute inset-0"
@@ -229,13 +128,13 @@ function Hero() {
           <div className="flex items-center gap-3 mb-6">
             <div
               className="h-px w-10"
-              style={{ background: "var(--beige)" }}
+              style={{ background: "var(--beige, #f5f5dc)" }}
             />
             <span
               className="text-xs font-medium tracking-widest uppercase"
-              style={{ color: "var(--beige)" }}
+              style={{ color: "var(--beige, #f5f5dc)" }}
             >
-              {KECAMATAN} · {KABUPATEN} · {PROVINSI}
+              Kecamatan Kawedanan · Kabupaten Magetan · Jawa Timur
             </span>
           </div>
 
@@ -248,7 +147,7 @@ function Hero() {
               textShadow: "0 2px 20px rgba(0,0,0,0.3)",
             }}
           >
-            Desa<br />{DESA_NAME}
+            Desa<br />Selorejo
           </h1>
 
           <p
@@ -262,34 +161,91 @@ function Hero() {
             <button
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
               style={{
-                background: "var(--dark-green)",
+                background: "var(--dark-green, #1e3f20)",
                 color: "#fff",
-                border: "2px solid var(--dark-green)",
+                border: "2px solid var(--dark-green, #1e3f20)",
                 boxShadow: "0 4px 20px rgba(35,69,44,0.4)",
               }}
               onClick={() => document.getElementById("potensi-desa")?.scrollIntoView({ behavior: "smooth" })}
             >
-              Jelajahi Desa <IconArrowRight />
+              Jelajahi Desa
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+              </svg>
             </button>
-            <button
-              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+            <Link
+              href="/tentang-desa"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 inline-flex hover:-translate-y-0.5"
               style={{
                 background: "transparent",
                 color: "#fff",
                 border: "2px solid rgba(255,255,255,0.6)",
               }}
-              onClick={() => document.getElementById("tentang-desa")?.scrollIntoView({ behavior: "smooth" })}
             >
               Tentang Desa
-            </button>
+            </Link>
           </div>
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-        <span className="text-white text-xs tracking-widest uppercase">Scroll</span>
-        <div className="w-px h-10 bg-white/40 animate-pulse" />
+// ─── Sambutan Kepala Desa ───────────────────────────────────────────────────
+
+function SambutanKepalaDesa() {
+  return (
+    <section className="py-16 lg:py-20" style={{ background: "var(--beige-light)" }}>
+      <div className="max-w-5xl mx-auto px-6 lg:px-12">
+        <div
+          className="grid lg:grid-cols-[260px_1fr] gap-8 lg:gap-12 items-center p-7 lg:p-10 rounded-2xl"
+          style={{
+            background: "var(--off-white)",
+            border: "1px solid rgba(216,203,168,0.7)",
+            boxShadow: "0 12px 35px rgba(35,69,44,0.08)",
+          }}
+        >
+          <div className="text-center">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&h=640&fit=crop&auto=format"
+              alt="Foto Kepala Desa Selorejo"
+              className="w-44 h-52 lg:w-56 lg:h-64 object-cover rounded-xl mx-auto"
+              style={{ boxShadow: "0 10px 25px rgba(35,69,44,0.16)" }}
+            />
+            <p className="font-serif font-semibold text-lg mt-4" style={{ color: "var(--dark-green)" }}>
+              Bapak JUMADI
+            </p>
+            <p className="text-xs mt-1" style={{ color: "var(--sage-green)" }}>
+              Kepala Desa {DESA_NAME}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
+              <span
+                className="text-xs font-medium tracking-widest uppercase"
+                style={{ color: "var(--sage-green)" }}
+              >
+                Sambutan Kepala Desa
+              </span>
+            </div>
+            <h2
+              className="font-serif font-bold leading-tight mb-5"
+              style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--charcoal)" }}
+            >
+              Selamat Datang di Desa {DESA_NAME}
+            </h2>
+            <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(32,37,32,0.75)" }}>
+              Assalamu&apos;alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa {DESA_NAME}.
+              Website ini hadir sebagai ruang informasi dan pelayanan bagi seluruh masyarakat.
+            </p>
+            <p className="text-base leading-relaxed" style={{ color: "rgba(32,37,32,0.75)" }}>
+              Mari bersama-sama menjaga semangat gotong royong, mengembangkan potensi desa, dan mewujudkan
+              Desa {DESA_NAME} yang maju, mandiri, serta sejahtera. Wassalamu&apos;alaikum warahmatullahi wabarakatuh.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -300,7 +256,7 @@ function Hero() {
 const STATS = [
   { icon: "👥", value: "1.245", label: "Penduduk", sublabel: "Jiwa" },
   { icon: "🗺️", value: "320", label: "Luas Wilayah", sublabel: "Hektare" },
-  { icon: "🏘️", value: "4", label: "Dusun", sublabel: "Wilayah" },
+  { icon: "🏘️", value: "3", label: "Dusun", sublabel: "Wilayah" },
   { icon: "🛒", value: "15", label: "UMKM", sublabel: "Aktif" },
 ];
 
@@ -344,7 +300,7 @@ const ABOUT_INFO = [
   { label: "Kabupaten", value: KABUPATEN },
   { label: "Provinsi", value: PROVINSI },
   { label: "Luas Wilayah", value: "320 Hektare" },
-  { label: "Jumlah Dusun", value: "4 Dusun" },
+  { label: "Jumlah Dusun", value: "3 Dusun" },
 ];
 
 function About() {
@@ -401,8 +357,9 @@ function About() {
               ))}
             </div>
 
-            <button
-              className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+           <Link
+              href="/tentang-desa"
+              className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
               style={{
                 border: "2px solid var(--dark-green)",
                 color: "var(--dark-green)",
@@ -410,35 +367,55 @@ function About() {
               }}
             >
               Selengkapnya
-            </button>
+            </Link>
           </div>
-
-          {/* Right – photo */}
+          {/* Right – peta desa */}
           <div className="relative">
+            <h3
+              className="font-serif font-bold text-2xl mb-4"
+              style={{ color: "var(--charcoal)" }}
+            >
+              Peta Desa
+            </h3>
+
             <div
-              className="absolute -top-4 -left-4 w-full h-full rounded-2xl"
-              style={{ background: "var(--beige)", opacity: 0.4 }}
-            />
-            <img
-              src="https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?w=800&h=600&fit=crop&auto=format"
-              alt="Pemandangan aerial Desa Sumbermulyo yang indah"
-              className="relative w-full aspect-[4/3] object-cover rounded-2xl"
-              style={{ boxShadow: "0 20px 60px rgba(35,69,44,0.2)" }}
-            />
-            <div
-              className="absolute bottom-6 left-6 right-6 py-4 px-5 rounded-xl"
+              className="w-full aspect-[4/3] rounded-2xl overflow-hidden"
               style={{
-                background: "rgba(248,247,242,0.95)",
-                backdropFilter: "blur(8px)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                border: "1px solid rgba(216,203,168,0.6)",
+                boxShadow: "0 20px 60px rgba(35,69,44,0.2)",
               }}
             >
-              <div className="font-serif font-semibold text-base" style={{ color: "var(--dark-green)" }}>
-                Desa {DESA_NAME}
-              </div>
-              <div className="text-xs mt-0.5" style={{ color: "var(--sage-green)" }}>
-                {KECAMATAN}, {KABUPATEN}, {PROVINSI}
-              </div>
+              <iframe
+                title="Peta Desa Selorejo"
+                src="https://maps.google.com/maps?q=Desa+Selorejo,+Kecamatan+Kawedanan,+Kabupaten+Magetan,+Jawa+Timur&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-none"
+                loading="lazy"
+              />
+            </div>
+
+            <div
+              className="mt-4 py-4 px-5 rounded-xl text-center md:text-left"
+              style={{
+                background: "rgba(216,203,168,0.18)",
+                color: "var(--sage-green)",
+              }}
+            >
+              Desa {DESA_NAME}, {KECAMATAN}, {KABUPATEN}, {PROVINSI}
+            </div>
+
+            {/* Tambahan Tombol Peta Desa */}
+            <div className="mt-6 flex md:justify-start justify-center">
+              <Link
+                href="/peta-desa"
+                className="px-7 py-3 rounded-full text-sm font-semibold transition-all duration-200 inline-block hover:-translate-y-0.5"
+                style={{
+                  border: "2px solid var(--dark-green, #1e3f20)",
+                  color: "var(--dark-green, #1e3f20)",
+                  background: "transparent",
+                }}
+              >
+                Jelajahi Peta Desa
+              </Link>
             </div>
           </div>
         </div>
@@ -833,6 +810,8 @@ function Umkm() {
   return (
     <section id="umkm" className="py-20 lg:py-28" style={{ background: "var(--off-white)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        
+        {/* Bagian Judul */}
         <div className="max-w-xl mb-14">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
@@ -844,7 +823,7 @@ function Umkm() {
             </span>
           </div>
           <h2
-            className="font-serif font-bold leading-tight mb-3"
+            className="font-serif font-bold leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3vw, 2.75rem)", color: "var(--charcoal)" }}
           >
             UMKM Unggulan Desa
@@ -854,11 +833,44 @@ function Umkm() {
           </p>
         </div>
 
+        {/* Bagian Grid Kartu UMKM */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {UMKM_DATA.map((u) => (
             <UmkmCard key={u.id} umkm={u} onDetail={() => setSelected(u)} />
           ))}
         </div>
+
+        {/* ========================================= */}
+        {/* TAMBAHAN TOMBOL SELENGKAPNYA DI SINI */}
+        {/* ========================================= */}
+        <div className="mt-12 flex justify-center w-full">
+          <Link
+            href="/umkm"
+            className="px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg inline-flex items-center gap-2 group"
+            style={{
+              border: "2px solid var(--dark-green, #1e3f20)",
+              color: "var(--dark-green, #1e3f20)",
+              background: "transparent",
+            }}
+          >
+            Selengkapnya
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="18" 
+              height="18" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
+        </div>
+
       </div>
 
       {selected && <UmkmModal umkm={selected} onClose={() => setSelected(null)} />}
@@ -1168,22 +1180,7 @@ function Kontak() {
             </button>
           </div>
 
-          {/* Maps placeholder */}
-          <div
-            className="w-full aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center"
-            style={{
-              background: "rgba(123,146,117,0.15)",
-              border: "1px solid rgba(216,203,168,0.6)",
-              boxShadow: "0 8px 30px rgba(35,69,44,0.1)",
-            }}
-          >
-            <iframe
-              title="Lokasi Kantor Desa Sumbermulyo"
-              src="https://maps.google.com/maps?q=Kawedanan+Magetan+Jawa+Timur&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-full border-none"
-              loading="lazy"
-            />
-          </div>
+          
         </div>
       </div>
     </section>
@@ -1220,23 +1217,37 @@ function Footer() {
             </p>
           </div>
 
-          {/* Col 2 – navigasi */}
+         {/* Col 2 – Navigasi */}
           <div>
             <h4 className="text-xs font-semibold tracking-widest uppercase mb-5" style={{ color: "rgba(248,247,242,0.45)" }}>
               Navigasi
             </h4>
             <ul className="space-y-3">
-              {NAV_LINKS.map((link) => (
-                <li key={link}>
-                  <button
-                    onClick={() => scrollTo(link)}
-                    className="text-sm transition-opacity hover:opacity-70"
-                    style={{ color: "rgba(248,247,242,0.75)" }}
-                  >
-                    {link}
-                  </button>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Beranda
+                </Link>
+              </li>
+              <li>
+                <Link href="/tentang-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Tentang Desa
+                </Link>
+              </li>
+              <li>
+                <Link href="/umkm" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  UMKM
+                </Link>
+              </li>
+              <li>
+                <Link href="/perangkat-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Perangkat Desa
+                </Link>
+              </li>
+              <li>
+                <Link href="/kontak" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Kontak
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -1288,8 +1299,9 @@ function Footer() {
 export default function App() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <Navbar />
+      {/* Baris <Navbar /> sudah dihapus dari sini */}
       <Hero />
+      <SambutanKepalaDesa />
       <Stats />
       <About />
       <Potensi />
