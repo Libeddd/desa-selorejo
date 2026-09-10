@@ -13,8 +13,8 @@ export default function AdminDashboard() {
         <p className="text-sm text-gray-500 mt-1">Berikut adalah ringkasan data Desa Selorejo hari ini.</p>
       </div>
 
-      {/* Cards Grid (4 Kolom) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Cards Grid (3 Kolom) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Card 1: Total Berita */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between h-36 relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className="text-indigo-500 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
@@ -35,16 +35,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Card 3: Pengaduan Masuk */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between h-36 relative">
-          <span className="absolute top-5 right-5 bg-red-50 text-red-500 px-2 py-0.5 rounded text-[10px] font-bold">Urgent</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className="text-orange-500 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
-          <div>
-            <h3 className="text-3xl font-bold text-gray-800">18</h3>
-            <p className="text-xs text-gray-500 font-medium mt-1">Pengaduan Masuk</p>
-            <p className="text-[10px] text-red-500 font-medium mt-1">5 belum ditindaklanjuti</p>
-          </div>
-        </div>
+
 
         {/* Card 4: Jumlah UMKM */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between h-36 relative">
@@ -57,54 +48,8 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Tables Grid (2 Kolom) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-10">
-        
-        {/* Tabel Pengaduan Terbaru */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-gray-50 flex justify-between items-center">
-            <h3 className="font-bold text-gray-800 text-sm">Pengaduan Terbaru</h3>
-            <Link href="/admin/pengaduan" className="text-xs text-gray-400 hover:text-gray-800">Lihat Semua &rarr;</Link>
-          </div>
-          <div className="p-5 overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr>
-                  <th className="pb-3 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Nama Pelapor</th>
-                  <th className="pb-3 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Kategori</th>
-                  <th className="pb-3 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Tanggal</th>
-                  <th className="pb-3 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody className="text-xs text-gray-600 align-middle">
-                <tr className="border-b border-gray-50 last:border-0">
-                  <td className="py-4 font-medium text-gray-800">Budi Santoso</td>
-                  <td className="py-4 text-gray-500">Infrastruktur</td>
-                  <td className="py-4 text-gray-400">8 Sep 2026</td>
-                  <td className="py-4"><span className="bg-red-50 text-red-500 font-bold px-2.5 py-1 rounded-md text-[10px]">Baru</span></td>
-                </tr>
-                <tr className="border-b border-gray-50 last:border-0">
-                  <td className="py-4 font-medium text-gray-800">Siti Rahayu</td>
-                  <td className="py-4 text-gray-500">Sosial</td>
-                  <td className="py-4 text-gray-400">7 Sep 2026</td>
-                  <td className="py-4"><span className="bg-amber-50 text-amber-500 font-bold px-2.5 py-1 rounded-md text-[10px]">Diproses</span></td>
-                </tr>
-                <tr className="border-b border-gray-50 last:border-0">
-                  <td className="py-4 font-medium text-gray-800">Hendra Wijaya</td>
-                  <td className="py-4 text-gray-500">Administrasi</td>
-                  <td className="py-4 text-gray-400">6 Sep 2026</td>
-                  <td className="py-4"><span className="bg-emerald-50 text-emerald-500 font-bold px-2.5 py-1 rounded-md text-[10px]">Selesai</span></td>
-                </tr>
-                <tr className="border-b border-gray-50 last:border-0">
-                  <td className="py-4 font-medium text-gray-800">Rina Susanti</td>
-                  <td className="py-4 text-gray-500">Lingkungan</td>
-                  <td className="py-4 text-gray-400">5 Sep 2026</td>
-                  <td className="py-4"><span className="bg-red-50 text-red-500 font-bold px-2.5 py-1 rounded-md text-[10px]">Baru</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      {/* Tables Grid (1 Kolom) */}
+      <div className="grid grid-cols-1 gap-6 pb-10">
 
         {/* Tabel Berita Terbaru */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

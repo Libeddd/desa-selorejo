@@ -49,7 +49,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (pathname.includes("/berita")) headerTitle = "Kelola Berita";
   if (pathname.includes("/perangkat")) headerTitle = "Perangkat Desa";
   if (pathname.includes("/penduduk")) headerTitle = "Data Penduduk";
-  if (pathname.includes("/pengaduan")) headerTitle = "Pengaduan Masyarakat";
 
   return (
     <div className="flex h-screen overflow-hidden font-sans bg-[#f8f9fa]">
@@ -86,10 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
               Data UMKM
             </Link>
-            <Link href="/admin/pengaduan" className={menuClass("/admin/pengaduan")}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-              Pengaduan
-            </Link>
+
           </nav>
         </div>
         <div className="p-4 mb-2">
