@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-// 1. Ini bagian terpenting: Memanggil komponen Navbar yang baru saja dibuat
-import Navbar from "@/components/Navbar"; 
+// 1. Memanggil komponen dengan tanda ./ (karena folder components ada di sebelah file ini)
+import Navbar from "../components/Navbar"; 
+import HideOnAdmin from "../components/HideOnAdmin";
 
 export const metadata: Metadata = {
   title: {
@@ -36,10 +37,12 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning>
       <body suppressHydrationWarning className="flex flex-col min-h-screen">
         
-        {/* 2. Meletakkan Navbar di paling atas body agar muncul di semua halaman */}
-        <Navbar />
+        {/* Navbar dibungkus penjaga agar tidak muncul di halaman Admin */}
+        <HideOnAdmin>
+          <Navbar />
+        </HideOnAdmin>
         
-        {/* 3. Konten halaman akan muncul di bawah Navbar */}
+        {/* Konten halaman utama */}
         <main className="flex-grow bg-gray-50">
           {children}
         </main>
