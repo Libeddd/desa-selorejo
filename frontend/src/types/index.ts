@@ -29,12 +29,15 @@ export interface VillageOfficial {
   id: number
   name: string
   position: string
+  nip: string | null
   photo_url: string | null
   phone: string | null
   period_start: number | null
   period_end: number | null
   sort_order: number
   is_active: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 // ========================

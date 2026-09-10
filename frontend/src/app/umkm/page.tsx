@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { getUmkmStores } from "@/lib/database";
 
 export const metadata: Metadata = {
   title: "Direktori UMKM",
@@ -6,16 +9,16 @@ export const metadata: Metadata = {
     "Temukan produk dan jasa unggulan dari pelaku UMKM Desa Selorejo, Kabupaten Magetan.",
 };
 
-export default function UmkmPage() {
-  // Data dummy UMKM (Bisa diganti dengan data asli dari database/API nanti)
-  const UMKM_LIST = [
-    { nama: "Keripik Tempe Bu Siti", kategori: "Makanan", deskripsi: "Keripik tempe renyah khas Magetan dengan berbagai varian rasa.", foto: "https://images.unsplash.com/photo-1599598425947-330026e680a6?w=400&h=300&fit=crop" },
-    { nama: "Kerajinan Anyaman Bambu", kategori: "Kerajinan", deskripsi: "Berbagai perabotan dan hiasan rumah dari anyaman bambu berkualitas.", foto: "https://images.unsplash.com/photo-1516981879613-9f5da904015f?w=400&h=300&fit=crop" },
-    { nama: "Kopi Robusta Selorejo", kategori: "Minuman", deskripsi: "Kopi lokal hasil panen petani Selorejo yang dipanggang sempurna.", foto: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=400&h=300&fit=crop" },
-    { nama: "Sambal Pecel Mbah Kung", kategori: "Makanan", deskripsi: "Bumbu pecel khas Jawa Timur yang praktis dan lezat.", foto: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=300&fit=crop" },
-    { nama: "Mebel Kayu Jati Pak Joyo", kategori: "Mebel", deskripsi: "Perabotan rumah tangga dari kayu jati asli dengan ukiran indah.", foto: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?w=400&h=300&fit=crop" },
-    { nama: "Jamu Herbal Tradisional", kategori: "Kesehatan", deskripsi: "Minuman kesehatan dari rempah-rempah pilihan tanpa bahan pengawet.", foto: "https://images.unsplash.com/photo-1596755094514-f87e32f85ceb?w=400&h=300&fit=crop" },
-  ];
+export default async function UmkmPage({
+  searchParams,
+}: {
+  searchParams: { category?: string };
+}) {
+  const category = searchParams.category;
+  const umkmList = await getUmkmStores(category);
+
+  // Kategori statis untuk filter
+  const categories = ["Makanan", "Minuman", "Kerajinan", "Jasa", "Lainnya"];
 
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
@@ -37,57 +40,103 @@ export default function UmkmPage() {
       {/* Konten Grid UMKM */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-8 relative z-10">
         
-        {/* Opsional: Tempat untuk Filter / Kategori nanti */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-8 flex justify-center gap-4 flex-wrap">
-          <button className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-all" style={{ background: "var(--dark-green, #1e3f20)" }}>Semua</button>
-          <button className="px-5 py-2 rounded-full text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all">Makanan</button>
-          <button className="px-5 py-2 rounded-full text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all">Minuman</button>
-          <button className="px-5 py-2 rounded-full text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all">Kerajinan</button>
+        {/* Filter Kategori */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-8 flex justify-center gap-3 flex-wrap">
+          <Link 
+            href="/umkm"
+            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+              !category 
+                ? "text-white" 
+                : "text-gray-600 bg-gray-100 hover:bg-gray-200"
+            }`}
+            style={!category ? { background: "var(--dark-green, #1e3f20)" } : {}}
+          >
+            Semua
+          </Link>
+          
+          {categories.map((cat) => (
+            <Link 
+              key={cat}
+              href={`/umkm?category=${cat}`}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+                category === cat
+                  ? "text-white" 
+                  : "text-gray-600 bg-gray-100 hover:bg-gray-200"
+              }`}
+              style={category === cat ? { background: "var(--dark-green, #1e3f20)" } : {}}
+            >
+              {cat}
+            </Link>
+          ))}
         </div>
 
         {/* Grid Card */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {UMKM_LIST.map((umkm, index) => (
-            <div 
-              key={index} 
-              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col"
-            >
-              {/* Foto UMKM */}
-              <div className="h-48 overflow-hidden bg-gray-100 relative">
-                <img 
-                  src={umkm.foto} 
-                  alt={umkm.nama} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                />
-                <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
-                  <span className="text-xs font-bold tracking-wider uppercase" style={{ color: "var(--sage-green, #6b8e6b)" }}>
-                    {umkm.kategori}
-                  </span>
+        {umkmList.length === 0 ? (
+          <div className="text-center py-20 text-gray-500">
+            <p className="text-lg">Belum ada data UMKM {category ? `untuk kategori ${category}` : ''}.</p>
+            <p className="text-sm mt-2">Silakan tambahkan data melalui panel admin.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {umkmList.map((umkm) => (
+              <div 
+                key={umkm.id} 
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col"
+              >
+                {/* Foto UMKM */}
+                <div className="h-48 overflow-hidden bg-gray-100 relative">
+                  {umkm.cover_image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img 
+                      src={umkm.cover_image_url} 
+                      alt={umkm.name} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"/><path d="M12 3v6"/></svg>
+                    </div>
+                  )}
+                  {umkm.category && (
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+                      <span className="text-xs font-bold tracking-wider uppercase" style={{ color: "var(--sage-green, #6b8e6b)" }}>
+                        {umkm.category}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Info UMKM */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold mb-2 text-gray-900 group-hover:text-blue-700 transition-colors">
+                    {umkm.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4 flex-grow leading-relaxed">
+                    {umkm.description}
+                  </p>
+                  
+                  {/* Info Pemilik & Kontak */}
+                  <div className="border-t border-gray-100 pt-4 mb-4 text-sm text-gray-600">
+                    <p className="font-semibold text-gray-900 mb-1">Pemilik: {umkm.owner_name}</p>
+                    {umkm.address && <p className="truncate">{umkm.address}</p>}
+                    {umkm.whatsapp && <p className="text-green-600">WA: {umkm.whatsapp}</p>}
+                  </div>
+                  
+                  {/* Tombol Aksi */}
+                  <Link 
+                    href={`/umkm/${umkm.slug}`}
+                    className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90 flex items-center justify-center gap-2" 
+                    style={{ background: "rgba(30,63,32,0.06)", color: "var(--dark-green, #1e3f20)" }}
+                  >
+                    Lihat Detail UMKM
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </Link>
                 </div>
               </div>
-              
-              {/* Info UMKM */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold mb-2 text-gray-900 group-hover:text-blue-700 transition-colors">
-                  {umkm.nama}
-                </h3>
-                <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                  {umkm.deskripsi}
-                </p>
-                
-                {/* Tombol Aksi */}
-                <button 
-                  className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90 flex items-center justify-center gap-2" 
-                  style={{ background: "rgba(30,63,32,0.06)", color: "var(--dark-green, #1e3f20)" }}
-                >
-                  Lihat Detail Produk
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
-}
+}

@@ -1,14 +1,112 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { 
+  adminGetOfficials, 
+  adminCreateOfficial, 
+  adminUpdateOfficial, 
+  adminDeleteOfficial,
+  uploadImage
+} from "@/lib/database";
+import type { VillageOfficial } from "@/types";
 
 export default function AdminPerangkatPage() {
+  const [officials, setOfficials] = useState<VillageOfficial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"Tambah" | "Edit">("Tambah");
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const openModal = (type: "Tambah" | "Edit") => {
+  // Form states
+  const [name, setName] = useState("");
+  const [position, setPosition] = useState("");
+  const [nip, setNip] = useState("");
+  const [isActive, setIsActive] = useState(true);
+  const [sortOrder, setSortOrder] = useState(0);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    fetchOfficials();
+  }, []);
+
+  const fetchOfficials = async () => {
+    setIsLoading(true);
+    const data = await adminGetOfficials();
+    setOfficials(data);
+    setIsLoading(false);
+  };
+
+  const openModal = (type: "Tambah" | "Edit", official?: VillageOfficial) => {
     setModalType(type);
+    if (type === "Edit" && official) {
+      setSelectedId(official.id);
+      setName(official.name);
+      setPosition(official.position);
+      setNip(official.nip || "");
+      setIsActive(official.is_active);
+      setSortOrder(official.sort_order);
+      setPhotoUrl(official.photo_url);
+      setImageFile(null);
+    } else {
+      setSelectedId(null);
+      setName("");
+      setPosition("");
+      setNip("");
+      setIsActive(true);
+      setSortOrder(officials.length + 1);
+      setPhotoUrl(null);
+      setImageFile(null);
+    }
     setIsModalOpen(true);
+  };
+
+  const handleSubmit = async () => {
+    if (!name || !position) {
+      alert("Nama dan Jabatan wajib diisi!");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      let finalPhotoUrl = photoUrl;
+
+      if (imageFile) {
+        const uploadedUrl = await uploadImage(imageFile, 'officials');
+        if (uploadedUrl) finalPhotoUrl = uploadedUrl;
+      }
+
+      const payload: Partial<VillageOfficial> = {
+        name,
+        position,
+        nip: nip || null,
+        is_active: isActive,
+        sort_order: sortOrder,
+        photo_url: finalPhotoUrl,
+      };
+
+      if (modalType === "Tambah") {
+        await adminCreateOfficial(payload);
+      } else if (modalType === "Edit" && selectedId) {
+        await adminUpdateOfficial(selectedId, payload);
+      }
+
+      setIsModalOpen(false);
+      fetchOfficials();
+    } catch (error) {
+      console.error("Gagal menyimpan data perangkat:", error);
+      alert("Terjadi kesalahan saat menyimpan data.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (confirm("Apakah Anda yakin ingin menghapus data perangkat ini?")) {
+      await adminDeleteOfficial(id);
+      fetchOfficials();
+    }
   };
 
   return (
@@ -34,28 +132,54 @@ export default function AdminPerangkatPage() {
                 <th className="py-4 px-6 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Foto</th>
                 <th className="py-4 px-6 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Nama</th>
                 <th className="py-4 px-6 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Jabatan</th>
+                <th className="py-4 px-6 text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Status</th>
                 <th className="py-4 px-6 text-[10px] uppercase text-gray-400 font-semibold tracking-wider text-center">Aksi</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-600 align-middle">
-              <tr className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="py-4 px-6 text-gray-400">1</td>
-                <td className="py-4 px-6"><img src="https://ui-avatars.com/api/?name=Agus+Widodo&background=random" alt="Agus Widodo" className="w-8 h-8 rounded-full object-cover" /></td>
-                <td className="py-4 px-6 font-medium text-gray-800">Agus Widodo</td>
-                <td className="py-4 px-6 text-gray-500">Kepala Desa</td>
-                <td className="py-4 px-6 text-center">
-                  <button onClick={() => openModal("Edit")} className="border border-gray-200 text-gray-600 hover:border-gray-400 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">Edit</button>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="py-4 px-6 text-gray-400">2</td>
-                <td className="py-4 px-6"><img src="https://ui-avatars.com/api/?name=Dewi+Lestari&background=random" alt="Dewi Lestari" className="w-8 h-8 rounded-full object-cover" /></td>
-                <td className="py-4 px-6 font-medium text-gray-800">Dewi Lestari</td>
-                <td className="py-4 px-6 text-gray-500">Sekretaris Desa</td>
-                <td className="py-4 px-6 text-center">
-                  <button onClick={() => openModal("Edit")} className="border border-gray-200 text-gray-600 hover:border-gray-400 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">Edit</button>
-                </td>
-              </tr>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8">Memuat data...</td>
+                </tr>
+              ) : officials.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8">Belum ada data perangkat desa.</td>
+                </tr>
+              ) : (
+                officials.map((official, index) => (
+                  <tr key={official.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                    <td className="py-4 px-6 text-gray-400">{official.sort_order}</td>
+                    <td className="py-4 px-6">
+                      {official.photo_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={official.photo_url} alt={official.name} className="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">?</div>
+                      )}
+                    </td>
+                    <td className="py-4 px-6 font-medium text-gray-800">
+                      {official.name}
+                      {official.nip && <div className="text-xs text-gray-400 font-normal">NIP: {official.nip}</div>}
+                    </td>
+                    <td className="py-4 px-6 text-gray-500">{official.position}</td>
+                    <td className="py-4 px-6">
+                      {official.is_active ? (
+                        <span className="bg-emerald-50 text-emerald-600 font-bold px-3 py-1 rounded-full text-[10px]">Aktif</span>
+                      ) : (
+                        <span className="bg-gray-100 text-gray-500 font-bold px-3 py-1 rounded-full text-[10px]">Nonaktif</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button onClick={() => openModal("Edit", official)} className="border border-gray-200 text-gray-600 hover:border-gray-400 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">Edit</button>
+                        <button onClick={() => handleDelete(official.id)} className="border border-red-100 text-red-500 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -75,19 +199,77 @@ export default function AdminPerangkatPage() {
             <div className="p-6 overflow-y-auto space-y-4">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1.5">Nama Lengkap</label>
-                <input type="text" defaultValue={modalType === "Edit" ? "Agus Widodo" : ""} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]" placeholder="Masukkan nama lengkap" />
+                <input 
+                  type="text" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]" 
+                  placeholder="Masukkan nama lengkap" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">NIP (Opsional)</label>
+                <input 
+                  type="text" 
+                  value={nip}
+                  onChange={(e) => setNip(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]" 
+                  placeholder="Masukkan NIP jika ada" 
+                />
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1.5">Jabatan</label>
-                <select className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]">
-                  <option selected={modalType === "Edit"}>Kepala Desa</option>
-                  <option>Sekretaris Desa</option>
-                </select>
+                <input 
+                  type="text" 
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]" 
+                  placeholder="Misal: Kepala Desa, Sekretaris Desa" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">Foto</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  className="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1.5">Urutan (Sort)</label>
+                  <input 
+                    type="number" 
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(parseInt(e.target.value))}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1.5">Status Aktif</label>
+                  <label className="relative inline-flex items-center cursor-pointer mt-2">
+                    <input 
+                      type="checkbox" 
+                      className="sr-only peer" 
+                      checked={isActive}
+                      onChange={(e) => setIsActive(e.target.checked)}
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1e3f20]"></div>
+                    <span className="ml-3 text-sm font-medium text-gray-700">{isActive ? 'Aktif' : 'Nonaktif'}</span>
+                  </label>
+                </div>
               </div>
             </div>
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
               <button onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200 rounded-xl transition-colors">Batal</button>
-              <button className="px-5 py-2.5 text-sm font-semibold text-white bg-[#1e3f20] hover:bg-[#152e17] rounded-xl transition-colors shadow-sm">Simpan</button>
+              <button 
+                onClick={handleSubmit}
+                disabled={isSaving}
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-[#1e3f20] hover:bg-[#152e17] rounded-xl transition-colors shadow-sm disabled:opacity-50"
+              >
+                {isSaving ? "Menyimpan..." : "Simpan"}
+              </button>
             </div>
           </div>
         </div>

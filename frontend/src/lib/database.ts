@@ -17,6 +17,11 @@ export async function getVillageInfo(): Promise<VillageInfo | null> {
   return data
 }
 
+export async function adminUpdateVillageInfo(payload: Partial<VillageInfo>) {
+  // Assuming there is only one row, id = 1
+  return supabase.from('village_info').update(payload).eq('id', 1)
+}
+
 // ========================
 // Village Officials API
 // ========================
@@ -148,6 +153,19 @@ export async function getProductsByStore(storeId: number): Promise<Product[]> {
 // ========================
 // Admin: CRUD News
 // ========================
+export async function adminGetAllNews(): Promise<News[]> {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching admin news:', error)
+    return []
+  }
+  return data ?? []
+}
+
 export async function adminCreateNews(payload: Partial<News>) {
   return supabase.from('news').insert(payload)
 }
@@ -163,6 +181,19 @@ export async function adminDeleteNews(id: number) {
 // ========================
 // Admin: CRUD UMKM
 // ========================
+export async function adminGetAllUmkm(): Promise<UmkmStore[]> {
+  const { data, error } = await supabase
+    .from('umkm_stores')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching admin UMKM:', error)
+    return []
+  }
+  return data ?? []
+}
+
 export async function adminCreateUmkm(payload: Partial<UmkmStore>) {
   return supabase.from('umkm_stores').insert(payload)
 }
@@ -178,6 +209,19 @@ export async function adminDeleteUmkm(id: number) {
 // ========================
 // Admin: CRUD Officials
 // ========================
+export async function adminGetOfficials(): Promise<VillageOfficial[]> {
+  const { data, error } = await supabase
+    .from('village_officials')
+    .select('*')
+    .order('sort_order', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching admin officials:', error)
+    return []
+  }
+  return data ?? []
+}
+
 export async function adminCreateOfficial(payload: Partial<VillageOfficial>) {
   return supabase.from('village_officials').insert(payload)
 }
