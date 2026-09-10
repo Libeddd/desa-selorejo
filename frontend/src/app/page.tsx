@@ -193,7 +193,20 @@ function Hero() {
 
 // ─── Sambutan Kepala Desa ───────────────────────────────────────────────────
 
+import { getVillageOfficials as getOfficials } from "@/lib/database";
+
 function SambutanKepalaDesa() {
+  const [kades, setKades] = useState<{ name: string; photo_url: string | null } | null>(null);
+
+  useEffect(() => {
+    async function loadKades() {
+      const data = await getOfficials();
+      const head = data.find(o => o.position?.toLowerCase().includes('kepala desa'));
+      if (head) setKades({ name: head.name, photo_url: head.photo_url ?? null });
+    }
+    loadKades();
+  }, []);
+
   return (
     <section className="py-16 lg:py-20" style={{ background: "var(--beige-light)" }}>
       <div className="max-w-5xl mx-auto px-6 lg:px-12">
@@ -207,13 +220,13 @@ function SambutanKepalaDesa() {
         >
           <div className="text-center">
             <img
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&h=640&fit=crop&auto=format"
-              alt="Foto Kepala Desa Selorejo"
+              src={kades?.photo_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&h=640&fit=crop&auto=format"}
+              alt={`Foto ${kades?.name || 'Kepala Desa Selorejo'}`}
               className="w-44 h-52 lg:w-56 lg:h-64 object-cover rounded-xl mx-auto"
               style={{ boxShadow: "0 10px 25px rgba(35,69,44,0.16)" }}
             />
             <p className="font-serif font-semibold text-lg mt-4" style={{ color: "var(--dark-green)" }}>
-              Bapak JUMADI
+              {kades?.name || "Kepala Desa"}
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--sage-green)" }}>
               Kepala Desa {DESA_NAME}
@@ -251,24 +264,43 @@ function SambutanKepalaDesa() {
   );
 }
 
+
 // ─── Stats ───────────────────────────────────────────────────────────────────
 
-const STATS = [
-  { icon: "👥", value: "1.245", label: "Penduduk", sublabel: "Jiwa" },
-  { icon: "🗺️", value: "320", label: "Luas Wilayah", sublabel: "Hektare" },
-  { icon: "🏘️", value: "3", label: "Dusun", sublabel: "Wilayah" },
-  { icon: "🛒", value: "15", label: "UMKM", sublabel: "Aktif" },
-];
+import { getVillageInfo, getUmkmStores } from "@/lib/database";
+import type { VillageInfo } from "@/types";
 
 function Stats() {
+  const [stats, setStats] = useState([
+    { icon: "👥", value: "...", label: "Penduduk", sublabel: "Jiwa" },
+    { icon: "👨‍👩‍👧‍👦", value: "...", label: "Kepala Keluarga", sublabel: "KK" },
+    { icon: "🗺️", value: "298", label: "Luas Wilayah", sublabel: "Hektare" },
+    { icon: "🛒", value: "...", label: "UMKM", sublabel: "Aktif" },
+  ]);
+
+  useEffect(() => {
+    async function loadData() {
+      const info = await getVillageInfo();
+      const umkms = await getUmkmStores();
+      
+      setStats([
+        { icon: "👥", value: info?.total_penduduk?.toString() || "0", label: "Penduduk", sublabel: "Jiwa" },
+        { icon: "👨‍👩‍👧‍👦", value: info?.total_kk?.toString() || "0", label: "Kepala Keluarga", sublabel: "KK" },
+        { icon: "🗺️", value: "298", label: "Luas Wilayah", sublabel: "Hektare" },
+        { icon: "🛒", value: umkms.length.toString(), label: "UMKM", sublabel: "Aktif" },
+      ]);
+    }
+    loadData();
+  }, []);
+
   return (
     <section className="py-16 lg:py-20" style={{ background: "var(--off-white)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-px" style={{ background: "var(--beige)" }}>
-          {STATS.map((s) => (
+          {stats.map((s) => (
             <div
               key={s.label}
-              className="flex flex-col items-center justify-center py-12 px-6 text-center"
+              className="flex flex-col items-center justify-center py-12 px-6 text-center transition-all duration-300 hover:bg-gray-50/50"
               style={{ background: "var(--off-white)" }}
             >
               <span className="text-3xl mb-3">{s.icon}</span>
@@ -299,7 +331,7 @@ const ABOUT_INFO = [
   { label: "Kecamatan", value: KECAMATAN },
   { label: "Kabupaten", value: KABUPATEN },
   { label: "Provinsi", value: PROVINSI },
-  { label: "Luas Wilayah", value: "320 Hektare" },
+  { label: "Luas Wilayah", value: "298,3 Hektare" },
   { label: "Jumlah Dusun", value: "3 Dusun" },
 ];
 
@@ -326,7 +358,7 @@ function About() {
               Tentang Desa<br />{DESA_NAME}
             </h2>
             <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(32,37,32,0.75)" }}>
-              Desa {DESA_NAME} adalah desa yang terletak di Kecamatan {KECAMATAN}, Kabupaten {KABUPATEN}, Daerah Istimewa Yogyakarta. Desa ini dikenal dengan keindahan alamnya yang asri, kekayaan budaya lokal, serta potensi pertanian dan perkebunan yang melimpah.
+              Desa {DESA_NAME} adalah desa yang terletak di Kecamatan {KECAMATAN}, Kabupaten {KABUPATEN}, Provinsi {PROVINSI}. Desa ini dikenal dengan keindahan alamnya yang asri, kekayaan budaya lokal, serta potensi pertanian dan perkebunan yang melimpah.
             </p>
             <p className="text-base leading-relaxed mb-8" style={{ color: "rgba(32,37,32,0.75)" }}>
               Dengan semangat gotong royong dan kepemimpinan yang visioner, Desa {DESA_NAME} terus berkembang menjadi desa mandiri yang mampu memberdayakan seluruh potensi masyarakatnya menuju kehidupan yang lebih sejahtera.
@@ -806,6 +838,30 @@ function UmkmModal({ umkm, onClose }: { umkm: Umkm; onClose: () => void }) {
 
 function Umkm() {
   const [selected, setSelected] = useState<Umkm | null>(null);
+  const [umkms, setUmkms] = useState<Umkm[]>([]);
+
+  useEffect(() => {
+    async function loadUmkm() {
+      const data = await getUmkmStores();
+      const mapped = data.slice(0, 3).map(u => ({
+        id: u.id,
+        name: u.name,
+        category: u.category || 'Lainnya',
+        desc: u.description || '',
+        owner: u.owner_name || '',
+        location: u.address || '',
+        img: u.image_url || 'https://images.unsplash.com/photo-1775377262418-24c4d1c89574?w=600&h=400&fit=crop&auto=format',
+        phone: u.phone || '',
+        instagram: '', // Tidak ada di skema
+        hours: '08.00 - 17.00 WIB',
+        products: 'Berbagai produk',
+        address: u.address || '',
+        fullDesc: u.description || ''
+      }));
+      setUmkms(mapped);
+    }
+    loadUmkm();
+  }, []);
 
   return (
     <section id="umkm" className="py-20 lg:py-28" style={{ background: "var(--off-white)" }}>
@@ -835,7 +891,7 @@ function Umkm() {
 
         {/* Bagian Grid Kartu UMKM */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {UMKM_DATA.map((u) => (
+          {umkms.map((u) => (
             <UmkmCard key={u.id} umkm={u} onDetail={() => setSelected(u)} />
           ))}
         </div>
@@ -878,44 +934,8 @@ function Umkm() {
   );
 }
 
-// ─── Perangkat Desa (Flowchart Hierarchy) ────────────────────────────────────
-
-const KEPALA_DESA = {
-  name: "H. Supriyadi, S.IP.",
-  jabatan: "Kepala Desa",
-  role: "Pimpinan Desa",
-  phone: "628111222333",
-  img: "https://images.unsplash.com/photo-1648448942225-7aa06c7e8f79?w=200&h=200&fit=crop&auto=format",
-};
-
-const SEKRETARIS_DESA = {
-  name: "Dra. Rini Kartika",
-  jabatan: "Sekretaris Desa",
-  role: "Sekretariat Desa",
-  phone: "628222333444",
-  img: "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=200&h=200&fit=crop&auto=format",
-};
-
-const KAUR_LIST = [
-  {
-    name: "Agus Setiawan, S.E.",
-    jabatan: "Kaur Keuangan",
-    phone: "628333444555",
-    img: "https://images.unsplash.com/photo-1626499370263-b2a0501f2773?w=200&h=200&fit=crop&auto=format",
-  },
-  {
-    name: "Eko Prasetyo",
-    jabatan: "Kaur Umum",
-    phone: "628444555666",
-    img: "https://images.unsplash.com/photo-1665578705764-5c8e6282c944?w=200&h=200&fit=crop&auto=format",
-  },
-  {
-    name: "Slamet Riyadi",
-    jabatan: "Kaur Perencanaan",
-    phone: "628555666777",
-    img: "https://images.unsplash.com/photo-1747316647681-18c79b9cd648?w=200&h=200&fit=crop&auto=format",
-  },
-];
+import { getVillageOfficials } from "@/lib/database";
+import type { VillageOfficial } from "@/types";
 
 function OfficialCard({
   p,
@@ -1025,6 +1045,48 @@ function ConnectorVertical() {
 }
 
 function Perangkat() {
+  const [kades, setKades] = useState<any>(null);
+  const [sekdes, setSekdes] = useState<any>(null);
+  const [others, setOthers] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadOfficials() {
+      const data = await getVillageOfficials();
+      
+      const head = data.find(o => o.position?.toLowerCase().includes('kepala desa'));
+      const sec = data.find(o => o.position?.toLowerCase().includes('sekretaris'));
+      const rest = data.filter(o => 
+        !o.position?.toLowerCase().includes('kepala desa') && 
+        !o.position?.toLowerCase().includes('sekretaris')
+      ).slice(0, 3); // Hanya tampilkan 3 di homepage agar tidak terlalu panjang
+      
+      if (head) {
+        setKades({
+          name: head.name,
+          jabatan: head.position,
+          phone: head.phone || '',
+          img: head.photo_url || "https://images.unsplash.com/photo-1648448942225-7aa06c7e8f79?w=200&h=200&fit=crop&auto=format"
+        });
+      }
+      if (sec) {
+        setSekdes({
+          name: sec.name,
+          jabatan: sec.position,
+          phone: sec.phone || '',
+          img: sec.photo_url || "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=200&h=200&fit=crop&auto=format"
+        });
+      }
+      
+      setOthers(rest.map(o => ({
+        name: o.name,
+        jabatan: o.position,
+        phone: o.phone || '',
+        img: o.photo_url || "https://images.unsplash.com/photo-1626499370263-b2a0501f2773?w=200&h=200&fit=crop&auto=format"
+      })));
+    }
+    loadOfficials();
+  }, []);
+
   return (
     <section
       id="perangkat-desa"
@@ -1056,59 +1118,91 @@ function Perangkat() {
         <div className="flex flex-col items-center w-full max-w-5xl mx-auto">
           
           {/* LEVEL 1: KEPALA DESA (Top Level) */}
-          <div className="w-full max-w-xs z-10">
-            <OfficialCard
-              p={KEPALA_DESA}
-              isFeatured={true}
-              badgeBg="var(--dark-green)"
-              badgeColor="#ffffff"
-            />
-          </div>
+          {kades && (
+            <div className="w-full max-w-xs z-10">
+              <OfficialCard
+                p={kades}
+                isFeatured={true}
+                badgeBg="var(--dark-green)"
+                badgeColor="#ffffff"
+              />
+            </div>
+          )}
 
-          {/* CONNECTOR LINE LEVEL 1 -> LEVEL 2 */}
-          <ConnectorVertical />
+          {kades && sekdes && <ConnectorVertical />}
 
           {/* LEVEL 2: SEKRETARIS DESA (Second Level) */}
-          <div className="w-full max-w-xs z-10">
-            <OfficialCard
-              p={SEKRETARIS_DESA}
-              isFeatured={false}
-              badgeBg="var(--sage-green)"
-              badgeColor="#ffffff"
-            />
-          </div>
-
-          {/* CONNECTOR BRANCHING LEVEL 2 -> LEVEL 3 */}
-          <div className="w-full flex flex-col items-center my-2">
-            {/* Vertical stem from Sekdes */}
-            <div className="w-0.5 h-6 bg-[var(--sage-green)]" />
-            
-            {/* Desktop Horizontal Line connecting 3 columns */}
-            <div className="hidden md:block w-3/4 h-0.5 bg-[var(--sage-green)] relative">
-              <div className="absolute left-0 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
-              <div className="absolute right-0 top-0 w-0.5 h-6 bg-[var(--sage-green)]" />
+          {sekdes && (
+            <div className="w-full max-w-xs z-10">
+              <OfficialCard
+                p={sekdes}
+                isFeatured={false}
+                badgeBg="var(--sage-green)"
+                badgeColor="#ffffff"
+              />
             </div>
+          )}
 
-            {/* Mobile Vertical Stem */}
-            <div className="md:hidden w-0.5 h-6 bg-[var(--sage-green)]" />
-          </div>
-
-          {/* LEVEL 3: KAUR (3 Columns) */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-2">
-            {KAUR_LIST.map((kaur) => (
-              <div key={kaur.jabatan} className="w-full">
-                <OfficialCard
-                  p={kaur}
-                  isFeatured={false}
-                  badgeBg="rgba(216,203,168,0.7)"
-                  badgeColor="var(--charcoal)"
-                />
+          {sekdes && others.length > 0 && (
+            <div className="w-full flex flex-col items-center my-2">
+              <div className="w-0.5 h-6 bg-[var(--sage-green)]" />
+              
+              <div className="hidden md:block w-3/4 h-0.5 bg-[var(--sage-green)] relative">
+                {others.map((_, i) => (
+                  <div key={i} className="absolute top-0 w-0.5 h-6 bg-[var(--sage-green)]" style={{ left: i === 0 ? '0' : i === others.length - 1 ? '100%' : '50%', transform: i === 1 ? 'translateX(-50%)' : 'none' }} />
+                ))}
               </div>
-            ))}
-          </div>
+
+              <div className="md:hidden w-0.5 h-6 bg-[var(--sage-green)]" />
+            </div>
+          )}
+
+          {/* LEVEL 3: OTHER OFFICIALS (3 Columns) */}
+          {others.length > 0 && (
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-2">
+              {others.map((kaur, idx) => (
+                <div key={idx} className="w-full">
+                  <OfficialCard
+                    p={kaur}
+                    isFeatured={false}
+                    badgeBg="rgba(216,203,168,0.7)"
+                    badgeColor="var(--charcoal)"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
         </div>
+        
+        <div className="mt-12 flex justify-center w-full">
+          <Link
+            href="/perangkat-desa"
+            className="px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg inline-flex items-center gap-2 group"
+            style={{
+              border: "2px solid var(--dark-green, #1e3f20)",
+              color: "var(--dark-green, #1e3f20)",
+              background: "transparent",
+            }}
+          >
+            Lihat Struktur Lengkap
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="18" 
+              height="18" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
+        </div>
+
       </div>
     </section>
   );
