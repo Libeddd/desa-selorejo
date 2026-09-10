@@ -3,47 +3,50 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State untuk toggle Tampilkan/Sembunyikan password
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
-    
-    // ==========================================
-    // LOGIKA LOGIN SEMENTARA (HARDCODED)
-    // Email saya sesuaikan dengan placeholder di gambar Anda
-    // ==========================================
-    const dummyEmail = "admin@selorejo.desa.id"; 
-    const dummyPassword = "admin123";
+    setLoading(true);
 
-    if (email === dummyEmail && password === dummyPassword) {
-      document.cookie = "admin_session=true; path=/";
-      router.push("/admin"); 
-    } else {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
       setErrorMsg("Email atau password salah! Silakan coba lagi.");
+    } else {
+      // Set cookie sesi agar middleware bisa memproteksi halaman admin
+      document.cookie = "admin_session=true; path=/";
+      router.push("/admin");
     }
   };
 
   return (
     <main 
       className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden bg-cover bg-center"
-      // Gambar background sementara (Anda bisa menggantinya dengan foto asli Desa Selorejo nanti)
       style={{ backgroundImage: "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80')" }}
     >
-      {/* Overlay gradient hijau gelap ala gambar */}
+      {/* Overlay gradient hijau gelap */}
       <div className="absolute inset-0 bg-[#1e3f20]/70 mix-blend-multiply" />
       <div className="absolute inset-0 bg-black/30" />
 
       {/* Konten Utama */}
       <div className="relative z-10 w-full max-w-md flex flex-col items-center">
         
-        {/* Teks Judul Atas (Sesuai request: Tanpa Logo Bulat DS) */}
+        {/* Teks Judul Atas */}
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2 drop-shadow-md">
             Desa Selorejo
@@ -79,7 +82,8 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20]"
+                disabled={loading}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20] disabled:opacity-60"
                 placeholder="admin@selorejo.desa.id"
               />
             </div>
@@ -95,7 +99,8 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-4 pr-24 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20]"
+                  disabled={loading}
+                  className="w-full pl-4 pr-24 py-3 rounded-xl border border-gray-200 outline-none transition-all text-sm focus:border-[#1e3f20] focus:ring-1 focus:ring-[#1e3f20] disabled:opacity-60"
                   placeholder="••••••••"
                 />
                 <button
@@ -111,10 +116,17 @@ export default function AdminLoginPage() {
             {/* Tombol Masuk */}
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-lg mt-4 text-sm"
+              disabled={loading}
+              className="w-full py-3.5 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-lg mt-4 text-sm disabled:opacity-70 flex items-center justify-center gap-2"
               style={{ background: "var(--dark-green, #1e3f20)" }}
             >
-              Masuk
+              {loading && (
+                <svg className="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              )}
+              {loading ? "Memproses..." : "Masuk"}
             </button>
           </form>
 
@@ -134,7 +146,7 @@ export default function AdminLoginPage() {
       {/* Footer Text */}
       <div className="absolute bottom-6 text-center z-10 w-full">
         <p className="text-[10px] text-white/50 tracking-wider">
-          © 2026 Desa Selorejo - Kab. Blitar
+          © 2026 Desa Selorejo - Kab. Magetan
         </p>
       </div>
     </main>
