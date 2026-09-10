@@ -3,57 +3,81 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import Toast from "@/components/Toast";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname(); // Untuk melacak kita sedang di halaman mana
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState("");
 
-  // 1. Pengecekan Login Terpusat
   useEffect(() => {
-    // Jika sedang di halaman login, biarkan saja
     if (pathname === "/admin/login") {
       setIsLoading(false);
       return;
     }
 
-    const isLoggedIn = document.cookie.includes("admin_session=true");
-    if (!isLoggedIn) {
-      router.replace("/admin/login");
-    } else {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        // Fallback: cek cookie lama
+        const isLoggedIn = document.cookie.includes("admin_session=true");
+        if (!isLoggedIn) {
+          router.replace("/admin/login");
+          return;
+        }
+      } else {
+        setUserEmail(session.user.email || "");
+      }
       setIsLoading(false);
-    }
+    };
+
+    checkSession();
   }, [pathname, router]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     document.cookie = "admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     router.push("/admin/login");
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-gray-50">Memuat Sistem...</div>;
+  if (isLoading) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="flex flex-col items-center gap-3">
+        <svg className="animate-spin w-8 h-8 text-[#1e3f20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        <p className="text-sm text-gray-500">Memuat Sistem...</p>
+      </div>
+    </div>
+  );
 
-  // Jika ini halaman login, render halamannya saja tanpa Sidebar
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 
-  // 2. Fungsi untuk menentukan menu mana yang sedang aktif menyala
   const isActive = (path: string) => pathname === path;
-  const menuClass = (path: string) => 
+  const menuClass = (path: string) =>
     isActive(path)
-      ? "flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 text-white font-medium text-sm" // Style Aktif
-      : "flex items-center gap-3 px-4 py-3 rounded-lg text-[#a3b1a3] hover:bg-white/5 hover:text-white transition-colors text-sm"; // Style Tidak Aktif
+      ? "flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 text-white font-medium text-sm"
+      : "flex items-center gap-3 px-4 py-3 rounded-lg text-[#a3b1a3] hover:bg-white/5 hover:text-white transition-colors text-sm";
 
-  // 3. Menentukan Judul Header otomatis berdasarkan halaman
   let headerTitle = "Dashboard";
   if (pathname.includes("/berita")) headerTitle = "Kelola Berita";
   if (pathname.includes("/perangkat")) headerTitle = "Perangkat Desa";
   if (pathname.includes("/penduduk")) headerTitle = "Data Penduduk";
+  if (pathname.includes("/umkm")) headerTitle = "Data UMKM";
+
+  // Ambil inisial dari email (huruf pertama sebelum @)
+  const initials = userEmail ? userEmail[0].toUpperCase() : "A";
 
   return (
     <div className="flex h-screen overflow-hidden font-sans bg-[#f8f9fa]">
+      <Toast />
       
-      {/* SIDEBAR (Hanya ditulis 1 kali di sini) */}
+      {/* SIDEBAR */}
       <aside className="w-64 flex-shrink-0 flex flex-col justify-between" style={{ background: "var(--dark-green, #1e3f20)" }}>
         <div>
           <div className="p-6 flex items-center gap-3 mb-4">
@@ -85,7 +109,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
               Data UMKM
             </Link>
-
           </nav>
         </div>
         <div className="p-4 mb-2">
@@ -104,15 +127,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h1 className="text-lg font-bold text-gray-800">{headerTitle}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#3a5a40] text-white flex items-center justify-center font-bold text-sm">AF</div>
+            <div className="w-10 h-10 rounded-full bg-[#3a5a40] text-white flex items-center justify-center font-bold text-sm">{initials}</div>
             <div className="hidden md:block text-right">
-              <p className="text-sm font-bold text-gray-800 leading-tight">Ahmad Fauzi</p>
+              <p className="text-sm font-bold text-gray-800 leading-tight">{userEmail || "Admin Desa"}</p>
               <p className="text-xs text-gray-400 font-medium">Admin Desa</p>
             </div>
           </div>
         </header>
 
-        {/* AREA KONTEN (Halaman-halaman akan dirender di dalam {children} ini) */}
+        {/* AREA KONTEN */}
         <main className="flex-1 overflow-y-auto p-8 max-w-6xl mx-auto w-full">
           {children}
         </main>

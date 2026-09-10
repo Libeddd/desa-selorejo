@@ -10,6 +10,17 @@ export default function ContactForm({ phone }: ContactFormProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
+  const handlePhoneChange = (val: string) => {
+    const cleaned = val.replace(/\D/g, "");
+    if (val && val !== cleaned) {
+      setPhoneError("Nomor HP hanya boleh berisi angka");
+    } else {
+      setPhoneError("");
+    }
+    return cleaned;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -92,9 +103,15 @@ export default function ContactForm({ phone }: ContactFormProps) {
           type="text"
           required
           disabled={loading}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 outline-none transition-all disabled:opacity-60"
-          placeholder="Contoh: 08123456789"
+          inputMode="numeric"
+          onChange={(e) => {
+            const cleaned = handlePhoneChange(e.target.value);
+            e.target.value = cleaned;
+          }}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 outline-none transition-all disabled:opacity-60 ${phoneError ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-gray-200 focus:ring-[#6b8e6b]"}`}
+          placeholder="Contoh: 08123456789 (hanya angka)"
         />
+        {phoneError && <p className="text-xs text-red-500 mt-1">{phoneError}</p>}
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">

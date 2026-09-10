@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { 
   adminGetAllNews, 
   adminCreateNews, 
@@ -9,7 +9,10 @@ import {
   uploadImage,
   deleteImage
 } from "@/lib/database";
+import { toast } from "@/components/Toast";
 import type { News } from "@/types";
+
+type FilterStatus = "Semua" | "Published" | "Draft";
 
 export default function AdminBeritaPage() {
   const [newsList, setNewsList] = useState<News[]>([]);
@@ -17,6 +20,8 @@ export default function AdminBeritaPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"Tambah" | "Edit">("Tambah");
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("Semua");
 
   // Form states
   const [title, setTitle] = useState("");
@@ -37,6 +42,18 @@ export default function AdminBeritaPage() {
     setNewsList(data);
     setIsLoading(false);
   };
+
+  // Filter & Search di sisi klien
+  const filteredNews = useMemo(() => {
+    return newsList.filter((news) => {
+      const matchSearch = news.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchStatus =
+        filterStatus === "Semua" ||
+        (filterStatus === "Published" && news.is_published) ||
+        (filterStatus === "Draft" && !news.is_published);
+      return matchSearch && matchStatus;
+    });
+  }, [newsList, searchQuery, filterStatus]);
 
   const openModal = (type: "Tambah" | "Edit", news?: News) => {
     setModalType(type);
@@ -65,42 +82,43 @@ export default function AdminBeritaPage() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !content) {
-      alert("Judul dan isi berita wajib diisi!");
-      return;
-    }
+    if (!title.trim()) { toast("Judul berita wajib diisi!", "error"); return; }
+    if (!content.trim()) { toast("Isi berita wajib diisi!", "error"); return; }
 
     setIsSaving(true);
     try {
       let finalImageUrl = coverImageUrl;
-
       if (imageFile) {
         const uploadedUrl = await uploadImage(imageFile, 'news');
         if (uploadedUrl) finalImageUrl = uploadedUrl;
       }
 
       const payload: Partial<News> = {
-        title,
+        title: title.trim(),
         slug: generateSlug(title),
         category,
-        content,
-        excerpt: content.substring(0, 150) + "...", // Auto excerpt
+        content: content.trim(),
+        excerpt: content.substring(0, 150) + "...",
         is_published: isPublished,
         cover_image_url: finalImageUrl,
         published_at: isPublished ? new Date().toISOString() : null,
       };
 
       if (modalType === "Tambah") {
-        await adminCreateNews(payload);
+        const { error } = await adminCreateNews(payload);
+        if (error) { toast(`Gagal menyimpan: ${error.message}`, "error"); return; }
+        toast("Berita berhasil ditambahkan! ✓");
       } else if (modalType === "Edit" && selectedId) {
-        await adminUpdateNews(selectedId, payload);
+        const { error } = await adminUpdateNews(selectedId, payload);
+        if (error) { toast(`Gagal memperbarui: ${error.message}`, "error"); return; }
+        toast("Berita berhasil diperbarui! ✓");
       }
 
       setIsModalOpen(false);
       fetchNews();
     } catch (error) {
       console.error("Gagal menyimpan berita:", error);
-      alert("Terjadi kesalahan saat menyimpan berita.");
+      toast("Terjadi kesalahan saat menyimpan berita.", "error");
     } finally {
       setIsSaving(false);
     }
@@ -111,15 +129,15 @@ export default function AdminBeritaPage() {
     try {
       const { error } = await adminDeleteNews(id);
       if (error) {
-        alert(`Gagal menghapus: ${error.message}`);
+        toast(`Gagal menghapus: ${error.message}`, "error");
         return;
       }
-      // Hapus gambar dari storage jika ada
       if (imageUrl) await deleteImage(imageUrl);
+      toast("Berita berhasil dihapus.");
       fetchNews();
     } catch (err) {
       console.error(err);
-      alert("Terjadi kesalahan saat menghapus berita.");
+      toast("Terjadi kesalahan saat menghapus berita.", "error");
     }
   };
 
@@ -132,16 +150,22 @@ export default function AdminBeritaPage() {
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input 
             type="text" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari judul berita..." 
             className="w-full pl-12 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20]"
           />
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <select className="bg-white border border-gray-200 text-gray-600 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-[#1e3f20] min-w-[120px]">
-            <option>Semua</option>
-            <option>Published</option>
-            <option>Draft</option>
+          <select 
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+            className="bg-white border border-gray-200 text-gray-600 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-[#1e3f20] min-w-[120px]"
+          >
+            <option value="Semua">Semua</option>
+            <option value="Published">Published</option>
+            <option value="Draft">Draft</option>
           </select>
           
           <button 
@@ -170,15 +194,13 @@ export default function AdminBeritaPage() {
             </thead>
             <tbody className="text-sm text-gray-600 align-middle">
               {isLoading ? (
-                <tr>
-                  <td colSpan={7} className="text-center py-8">Memuat data...</td>
-                </tr>
-              ) : newsList.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="text-center py-8">Belum ada berita.</td>
-                </tr>
+                <tr><td colSpan={7} className="text-center py-8 text-gray-400">Memuat data...</td></tr>
+              ) : filteredNews.length === 0 ? (
+                <tr><td colSpan={7} className="text-center py-8 text-gray-400">
+                  {searchQuery || filterStatus !== "Semua" ? "Tidak ada berita yang sesuai filter." : "Belum ada berita."}
+                </td></tr>
               ) : (
-                newsList.map((news, index) => (
+                filteredNews.map((news, index) => (
                   <tr key={news.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="py-4 px-6 text-gray-400">{index + 1}</td>
                     <td className="py-4 px-6">
@@ -191,12 +213,10 @@ export default function AdminBeritaPage() {
                         )}
                       </div>
                     </td>
-                    <td className="py-4 px-6 font-medium text-gray-800">{news.title}</td>
+                    <td className="py-4 px-6 font-medium text-gray-800 max-w-[200px] truncate">{news.title}</td>
                     <td className="py-4 px-6 text-gray-500 capitalize">{news.category}</td>
                     <td className="py-4 px-6 text-gray-400 text-xs">
-                      {new Date(news.created_at).toLocaleDateString('id-ID', {
-                        day: 'numeric', month: 'short', year: 'numeric'
-                      })}
+                      {new Date(news.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </td>
                     <td className="py-4 px-6">
                       {news.is_published ? (
@@ -221,7 +241,7 @@ export default function AdminBeritaPage() {
         </div>
       </div>
 
-      {/* MODAL POP-UP (TAMBAH / EDIT BERITA) */}
+      {/* MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
@@ -235,7 +255,7 @@ export default function AdminBeritaPage() {
             
             <div className="p-6 overflow-y-auto space-y-5">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1.5">Judul Berita</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">Judul Berita *</label>
                 <input 
                   type="text" 
                   value={title}
@@ -266,17 +286,15 @@ export default function AdminBeritaPage() {
                   className="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                 />
                 {(coverImageUrl || imageFile) && (
-                  <div className="text-xs text-gray-500">
-                    * Gambar akan diperbarui jika file baru dipilih.
-                  </div>
+                  <div className="text-xs text-gray-500">* Gambar akan diperbarui jika file baru dipilih.</div>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1.5">Isi Berita</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">Isi Berita *</label>
                 <textarea 
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full p-4 h-32 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20] resize-y" 
+                  className="w-full p-4 h-40 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#1e3f20] resize-y" 
                   placeholder="Tulis isi berita di sini..."
                 ></textarea>
               </div>
@@ -296,12 +314,7 @@ export default function AdminBeritaPage() {
             </div>
 
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-              <button 
-                onClick={() => setIsModalOpen(false)} 
-                className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200 rounded-xl transition-colors"
-              >
-                Batal
-              </button>
+              <button onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200 rounded-xl transition-colors">Batal</button>
               <button 
                 onClick={handleSubmit}
                 disabled={isSaving}
