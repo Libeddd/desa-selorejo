@@ -9,6 +9,12 @@ const KECAMATAN = "Kawedanan";
 const KABUPATEN = "Magetan";
 const PROVINSI = "Jawa Timur";
 
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=900&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=1600&h=900&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1629837568541-2a6c886eb7de?w=1600&h=900&fit=crop&auto=format",
+];
+
 // ─── Icons ──────────────────────────────────────────────────────────────────
 
 function IconMenu() {
@@ -94,17 +100,31 @@ function IconYoutube({ size = 20 }: { size?: number }) {
 // ─── Hero ────────────────────────────────────────────────────────────────────
 
 function Hero() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 5000); // Ganti gambar setiap 5 detik
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section
       id="beranda"
-      className="relative w-full min-h-screen flex items-center"
+      className="relative w-full min-h-screen flex items-center overflow-hidden"
       style={{ background: "var(--dark-green, #1e3f20)" }}
     >
-      <img
-        src="https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=900&fit=crop&auto=format"
-        alt="Lanskap Desa Selorejo yang hijau dan asri"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+      {HERO_IMAGES.map((src, index) => (
+        <img
+          key={src}
+          src={src}
+          alt={`Lanskap Desa Selorejo ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+            index === currentImageIndex ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
       
       {/* Gradient overlay */}
       <div
