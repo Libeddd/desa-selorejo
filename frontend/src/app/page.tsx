@@ -487,38 +487,11 @@ const POTENSI = [
   {
     icon: (
       <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <circle cx="24" cy="20" r="8" /><path d="M24 28v12" /><path d="M16 36h16" /><path d="M12 16c2-4 6-6 12-6M36 16c-2-4-6-6-12-6" />
-      </svg>
-    ),
-    title: "Perkebunan",
-    desc: "Perkebunan kelapa, pisang, dan kopi yang dikelola secara tradisional menghasilkan produk berkualitas tinggi.",
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
         <ellipse cx="24" cy="30" rx="12" ry="6" /><path d="M12 30c0-8 4-16 12-18 8 2 12 10 12 18" /><path d="M20 20c-2 2-3 5-3 8M28 20c2 2 3 5 3 8" />
       </svg>
     ),
     title: "Peternakan",
     desc: "Budidaya sapi, kambing, dan unggas yang dikelola kelompok tani ternak, mendukung ketahanan pangan lokal.",
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <path d="M8 36l8-8 6 4 8-10 6 6" /><rect x="6" y="10" width="36" height="26" rx="3" /><path d="M14 10V8M24 10V8M34 10V8" />
-      </svg>
-    ),
-    title: "Pariwisata",
-    desc: "Wisata alam sawah hijau, kolam renang alami, dan tur budaya lokal yang menarik minat wisatawan dari berbagai daerah.",
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <path d="M10 38V20l14-10 14 10v18" /><rect x="18" y="26" width="12" height="12" /><path d="M18 26v-6a6 6 0 0 1 12 0v6" />
-      </svg>
-    ),
-    title: "Kerajinan",
-    desc: "Anyaman bambu, gerabah, dan batik tulis karya pengrajin lokal yang kaya nilai seni dan kearifan budaya Jawa.",
   },
   {
     icon: (
