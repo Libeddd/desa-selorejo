@@ -28,7 +28,7 @@ export default async function PerangkatDesa() {
         <div 
           className="absolute inset-0 z-0"
           style={{
-            background: "linear-gradient(to bottom, rgba(30,63,32,0.85), rgba(30,63,32,0.98))",
+            background: "linear-gradient(to bottom, rgba(30,63,32,0.4), rgba(30,63,32,0.85))",
           }}
         />
         <div className="relative z-10">
