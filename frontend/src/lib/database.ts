@@ -8,7 +8,7 @@ export async function getVillageInfo(): Promise<VillageInfo | null> {
   const { data, error } = await supabase
     .from('village_info')
     .select('*')
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('Error fetching village info:', error)
@@ -81,7 +81,7 @@ export async function getNewsBySlug(slug: string): Promise<News | null> {
     .select('*')
     .eq('slug', slug)
     .eq('is_published', true)
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('Error fetching news by slug:', error)
@@ -123,7 +123,7 @@ export async function getUmkmBySlug(slug: string): Promise<UmkmStore | null> {
     .select('*, products(*)')
     .eq('slug', slug)
     .eq('is_active', true)
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('Error fetching UMKM by slug:', error)
