@@ -102,9 +102,13 @@ function IconYoutube({ size = 20 }: { size?: number }) {
 function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const nextSlide = () => setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+  const prevSlide = () => setCurrentImageIndex((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+  const goToSlide = (index: number) => setCurrentImageIndex(index);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+      nextSlide();
     }, 5000); // Ganti gambar setiap 5 detik
     return () => clearInterval(timer);
   }, []);
@@ -202,6 +206,42 @@ function Hero() {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Manual Navigation Buttons (Arrows) */}
+      <div className="absolute inset-y-0 left-4 lg:left-8 flex items-center z-20">
+        <button
+          onClick={prevSlide}
+          className="w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-all border border-white/20"
+          aria-label="Previous Slide"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      </div>
+      <div className="absolute inset-y-0 right-4 lg:right-8 flex items-center z-20">
+        <button
+          onClick={nextSlide}
+          className="w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-all border border-white/20"
+          aria-label="Next Slide"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      {/* Indicators (Dots) */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2 z-20">
+        {HERO_IMAGES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goToSlide(idx)}
+            className={`transition-all duration-300 rounded-full ${
+              idx === currentImageIndex 
+                ? "w-8 h-2 bg-white" 
+                : "w-2 h-2 bg-white/50 hover:bg-white/80"
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
