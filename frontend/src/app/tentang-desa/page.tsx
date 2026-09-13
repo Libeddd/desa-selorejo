@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getVillageInfo } from "@/lib/database";
+import Image from "next/image";
+import { getVillageInfo, getVillageOfficials } from "@/lib/database";
 
 export const metadata: Metadata = {
   title: "Tentang Desa",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 
 export default async function TentangDesaPage() {
   const villageInfo = await getVillageInfo();
+  const officials = await getVillageOfficials();
   
   // Parse mission safely
   let missions: string[] = [];
@@ -17,14 +19,12 @@ export default async function TentangDesaPage() {
     if (villageInfo?.mission) {
       missions = JSON.parse(villageInfo.mission);
     }
-  } catch (e) {
-    // If it's not JSON, maybe it's just a string or list
+  } catch {
     if (typeof villageInfo?.mission === 'string') {
       missions = [villageInfo.mission];
     }
   }
 
-  // Fallback Visi Misi jika kosong
   const visi = villageInfo?.vision || "Mewujudkan Desa Selorejo yang maju, mandiri, dan sejahtera berlandaskan nilai-nilai gotong royong.";
   const defaultMissions = [
     "Meningkatkan kualitas pelayanan publik secara transparan.",
@@ -35,10 +35,21 @@ export default async function TentangDesaPage() {
 
   const finalMissions = missions.length > 0 ? missions : defaultMissions;
 
+  const jabatanFallback = [
+    "Kepala Desa",
+    "Sekretaris Desa",
+    "Kaur Tata Usaha dan Umum",
+    "Kaur Keuangan",
+    "Kaur Perencanaan",
+    "Kasi Pemerintahan",
+    "Kasi Kesejahteraan",
+    "Kasi Pelayanan",
+  ];
+
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
       
-      {/* Header / Banner - Selaras dengan halaman lainnya */}
+      {/* Header / Banner */}
       <div 
         className="w-full pt-36 pb-16 px-6 lg:px-12 text-center" 
         style={{ background: "var(--dark-green, #1e3f20)" }}
@@ -147,7 +158,7 @@ export default async function TentangDesaPage() {
             </div>
             <h2 className="text-2xl font-serif font-bold mb-4" style={{ color: "var(--dark-green, #1e3f20)" }}>Visi</h2>
             <p className="text-gray-700 text-xl font-medium leading-relaxed italic">
-              "{visi}"
+              &ldquo;{visi}&rdquo;
             </p>
           </div>
 
@@ -170,28 +181,39 @@ export default async function TentangDesaPage() {
           </div>
         </div>
 
-        {/* Section 3: Struktur Perangkat Desa Overview */}
+        {/* Section 3: Struktur Pemerintahan Desa */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10 text-center">
           <h2 className="text-2xl font-serif font-bold mb-8" style={{ color: "var(--dark-green, #1e3f20)" }}>
             Struktur Pemerintahan Desa
           </h2>
           
-          <div className="flex flex-col md:flex-row flex-wrap justify-center gap-x-8 gap-y-10 mb-10 max-w-4xl mx-auto">
-            {[
-              "Kepala Desa",
-              "Sekretaris Desa",
-              "Kaur Tata Usaha dan Umum",
-              "Kaur Keuangan",
-              "Kaur Perencanaan",
-              "Kasi Pemerintahan",
-              "Kasi Kesejahteraan",
-              "Kasi Pelayanan",
-            ].map((jabatan, index) => (
-              <div key={index} className="flex flex-col items-center w-36">
+          {/* Grid official cards - centered on all screen sizes */}
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-8 mb-10 max-w-4xl mx-auto">
+            {officials.length > 0 ? officials.map((official, index) => (
+              <div key={index} className="flex flex-col items-center w-24 sm:w-32">
+                <div className="w-16 h-16 bg-gray-50 rounded-full mb-3 border border-dashed border-gray-300 overflow-hidden flex items-center justify-center text-gray-300">
+                  {official.photo_url ? (
+                    <Image
+                      src={official.photo_url}
+                      alt={official.name}
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  )}
+                </div>
+                <p className="text-[10px] font-bold text-center leading-tight uppercase tracking-wider" style={{ color: "var(--sage-green, #6b8e6b)" }}>
+                  {official.position}
+                </p>
+              </div>
+            )) : jabatanFallback.map((jabatan, index) => (
+              <div key={index} className="flex flex-col items-center w-24 sm:w-32">
                 <div className="w-16 h-16 bg-gray-50 rounded-full mb-3 border border-dashed border-gray-300 flex items-center justify-center text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
-                <p className="text-[10px] font-bold text-gray-800 text-center leading-tight uppercase tracking-wider" style={{ color: "var(--sage-green, #6b8e6b)" }}>
+                <p className="text-[10px] font-bold text-center leading-tight uppercase tracking-wider" style={{ color: "var(--sage-green, #6b8e6b)" }}>
                   {jabatan}
                 </p>
               </div>
@@ -203,7 +225,7 @@ export default async function TentangDesaPage() {
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             style={{ background: "var(--dark-green, #1e3f20)", color: "white" }}
           >
-            Lihat Struktur Organisasi & Perangkat Desa
+            Lihat Struktur Organisasi &amp; Perangkat Desa
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
         </div>
