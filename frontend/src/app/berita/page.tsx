@@ -24,16 +24,31 @@ export default async function BeritaPage() {
       
       {/* Header / Banner */}
       <div 
-        className="w-full pt-36 pb-20 px-6 lg:px-12 text-center" 
-        style={{ background: "var(--dark-green, #1e3f20)" }}
+        className="relative w-full pt-36 pb-20 px-6 lg:px-12 text-center overflow-hidden" 
       >
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
-          Kabar Desa
-        </h1>
-        <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
-        <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
-          Informasi terkini, pengumuman, dan liputan kegiatan seputar masyarakat Desa Selorejo.
-        </p>
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=400&fit=crop&auto=format')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(to bottom, rgba(30,63,32,0.85), rgba(30,63,32,0.98))",
+          }}
+        />
+        <div className="relative z-10">
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
+            Kabar Desa
+          </h1>
+          <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
+          <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
+            Informasi terkini, pengumuman, dan liputan kegiatan seputar masyarakat Desa Selorejo.
+          </p>
+        </div>
       </div>
 
       {/* Konten Utama - Grid Berita */}

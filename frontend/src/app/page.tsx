@@ -981,35 +981,6 @@ function OfficialCard({
         {p.name}
       </h3>
 
-      {/* Contact Quick Buttons */}
-      <div className="flex items-center justify-center gap-2 mt-auto pt-1">
-        <a
-          href={`https://wa.me/${p.phone}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-          title="WhatsApp"
-          style={{ background: "rgba(37,211,102,0.15)", color: "#25D366" }}
-        >
-          <IconWhatsApp size={14} />
-        </a>
-        <a
-          href={`tel:+${p.phone}`}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-          title="Telepon"
-          style={{ background: "rgba(35,69,44,0.1)", color: "var(--dark-green)" }}
-        >
-          <IconPhone />
-        </a>
-        <a
-          href={`mailto:desa.${DESA_NAME.toLowerCase()}@${KABUPATEN.toLowerCase()}.go.id`}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-          title="Email"
-          style={{ background: "rgba(123,146,117,0.15)", color: "var(--sage-green)" }}
-        >
-          <IconMail />
-        </a>
-      </div>
     </div>
   );
 }
