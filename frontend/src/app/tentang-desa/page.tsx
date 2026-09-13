@@ -51,16 +51,31 @@ export default async function TentangDesaPage() {
       
       {/* Header / Banner */}
       <div 
-        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center" 
-        style={{ background: "var(--dark-green, #1e3f20)" }}
+        className="relative w-full pt-36 pb-16 px-6 lg:px-12 text-center overflow-hidden" 
       >
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
-          Tentang Desa
-        </h1>
-        <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
-        <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
-          Mengenal lebih dekat sejarah, kondisi geografis, visi, misi, serta nilai-nilai luhur masyarakat Desa Selorejo.
-        </p>
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=400&fit=crop&auto=format')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(to bottom, rgba(30,63,32,0.85), rgba(30,63,32,0.98))",
+          }}
+        />
+        <div className="relative z-10">
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
+            Tentang Desa
+          </h1>
+          <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
+          <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
+            Mengenal lebih dekat sejarah, kondisi geografis, visi, misi, serta nilai-nilai luhur masyarakat Desa Selorejo.
+          </p>
+        </div>
       </div>
 
       {/* Konten Utama */}
@@ -150,9 +165,9 @@ export default async function TentangDesaPage() {
         </div>
 
         {/* Section 2: Visi dan Misi */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-col gap-8">
           {/* Card Visi */}
-          <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10 h-full transition-shadow hover:shadow-md">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10 transition-shadow hover:shadow-md">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={{ background: "rgba(30,63,32,0.08)", color: "var(--dark-green, #1e3f20)" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
             </div>
@@ -163,7 +178,7 @@ export default async function TentangDesaPage() {
           </div>
 
           {/* Card Misi */}
-          <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10 h-full transition-shadow hover:shadow-md">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-10 transition-shadow hover:shadow-md">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={{ background: "rgba(30,63,32,0.08)", color: "var(--dark-green, #1e3f20)" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>

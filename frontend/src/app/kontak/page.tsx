@@ -19,16 +19,31 @@ export default async function Kontak() {
       
       {/* Header / Banner */}
       <div 
-        className="w-full pt-36 pb-16 px-6 lg:px-12 text-center" 
-        style={{ background: "var(--dark-green, #1e3f20)" }}
+        className="relative w-full pt-36 pb-16 px-6 lg:px-12 text-center overflow-hidden" 
       >
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
-          Hubungi Kami
-        </h1>
-        <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
-        <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
-          Punya pertanyaan, saran, atau keperluan administrasi? Silakan hubungi Pemerintah Desa Selorejo melalui kontak di bawah ini.
-        </p>
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1786882546676-835df9107c1d?w=1600&h=400&fit=crop&auto=format')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(to bottom, rgba(30,63,32,0.85), rgba(30,63,32,0.98))",
+          }}
+        />
+        <div className="relative z-10">
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-md">
+            Hubungi Kami
+          </h1>
+          <div className="h-px w-16 mx-auto mb-6" style={{ background: "var(--beige, #f5f5dc)" }} />
+          <p className="text-white/80 max-w-2xl mx-auto text-lg font-light">
+            Punya pertanyaan, saran, atau keperluan administrasi? Silakan hubungi Pemerintah Desa Selorejo melalui kontak di bawah ini.
+          </p>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-12">
