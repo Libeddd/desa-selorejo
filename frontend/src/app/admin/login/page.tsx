@@ -28,8 +28,6 @@ export default function AdminLoginPage() {
     if (error) {
       setErrorMsg("Email atau password salah! Silakan coba lagi.");
     } else {
-      // Set cookie sesi agar middleware bisa memproteksi halaman admin
-      document.cookie = "admin_session=true; path=/";
       router.push("/admin");
     }
   };

@@ -24,11 +24,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        const isLoggedIn = document.cookie.includes("admin_session=true");
-        if (!isLoggedIn) {
-          router.replace("/admin/login");
-          return;
-        }
+        router.replace("/admin/login");
+        return;
       } else {
         setUserEmail(session.user.email || "");
       }
@@ -56,7 +53,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    document.cookie = "admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     router.push("/admin/login");
   };
 
