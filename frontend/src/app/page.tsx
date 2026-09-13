@@ -126,10 +126,6 @@ function Hero() {
         <div className="max-w-2xl">
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-6">
-            <div
-              className="h-px w-10"
-              style={{ background: "var(--beige, #f5f5dc)" }}
-            />
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--beige, #f5f5dc)" }}
@@ -235,7 +231,6 @@ function SambutanKepalaDesa() {
 
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
               <span
                 className="text-xs font-medium tracking-widest uppercase"
                 style={{ color: "var(--sage-green)" }}
@@ -356,7 +351,6 @@ function About() {
           {/* Left */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
               <span
                 className="text-xs font-medium tracking-widest uppercase"
                 style={{ color: "var(--sage-green)" }}
@@ -514,7 +508,6 @@ function Potensi() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="max-w-xl mb-14">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
@@ -858,7 +851,6 @@ function Umkm() {
         {/* Bagian Judul */}
         <div className="max-w-xl mb-14">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
@@ -1204,7 +1196,6 @@ function Kontak() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="max-w-xl mb-14">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8" style={{ background: "var(--sage-green)" }} />
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
