@@ -1274,9 +1274,7 @@ function Kontak() {
             <div className="space-y-5 mb-8">
               {[
                 { icon: <IconPin />, label: "Alamat Kantor", value: `Jl. Desa ${DESA_NAME} No. 01, ${KECAMATAN}, ${KABUPATEN}, ${PROVINSI}` },
-                { icon: <IconPhone />, label: "Telepon", value: "(0274) 123-456" },
                 { icon: <IconMail />, label: "Email", value: `desa.${DESA_NAME.toLowerCase()}@${KABUPATEN.toLowerCase()}.go.id` },
-                { icon: <IconWhatsApp />, label: "WhatsApp", value: "+62 812-3456-7890" },
                 { icon: <IconClock />, label: "Jam Pelayanan", value: "Senin – Jumat, 08.00 – 15.00 WIB" },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-4">
@@ -1347,7 +1345,7 @@ function Footer() {
             </p>
           </div>
 
-         {/* Col 2 – Navigasi */}
+        {/* Col 2 – Navigasi */}
           <div>
             <h4 className="text-xs font-semibold tracking-widest uppercase mb-5" style={{ color: "rgba(248,247,242,0.45)" }}>
               Navigasi
@@ -1368,9 +1366,21 @@ function Footer() {
                   UMKM
                 </Link>
               </li>
+              {/* Tambahan Peta Desa */}
+              <li>
+                <Link href="/peta-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Peta Desa
+                </Link>
+              </li>
               <li>
                 <Link href="/perangkat-desa" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
                   Perangkat Desa
+                </Link>
+              </li>
+              {/* Tambahan Berita */}
+              <li>
+                <Link href="/berita" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
+                  Berita
                 </Link>
               </li>
               <li>
