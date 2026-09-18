@@ -542,108 +542,126 @@ function About() {
 }
 
 
-// ─── Potensi ─────────────────────────────────────────────────────────────────
+// ─── Data BUMDes / Potensi ──────────────────────────────────────────────────
 
-const POTENSI = [
+const BUMDES_DATA = [
   {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <path d="M24 8C24 8 12 16 12 28a12 12 0 0 0 24 0C36 16 24 8 24 8z" />
-        <path d="M24 28v8M20 24l4 4 4-4" />
-      </svg>
-    ),
-    title: "Pertanian",
-    desc: "Lahan pertanian produktif dengan hasil padi, sayuran, dan tanaman pangan unggulan yang menjadi tumpuan ekonomi warga.",
+    id: 1,
+    category: "Pertanian",
+    categoryColor: "bg-[#4CAF50]", // Warna hijau badge
+    image: "https://images.unsplash.com/photo-1592982537447-6f296a0665f9?w=800&q=80", // Ganti dengan foto asli nanti
+    title: "BUMDes Pertanian",
+    desc: "Mengelola hasil panen warga desa dan mendistribusikan pupuk bersubsidi. BUMDes ini menjadi penghubun...",
     href: "/potensi/pertanian",
   },
   {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <ellipse cx="24" cy="30" rx="12" ry="6" /><path d="M12 30c0-8 4-16 12-18 8 2 12 10 12 18" /><path d="M20 20c-2 2-3 5-3 8M28 20c2 2 3 5 3 8" />
-      </svg>
-    ),
-    title: "Peternakan",
-    desc: "Budidaya sapi, kambing, dan unggas yang dikelola kelompok tani ternak, mendukung ketahanan pangan lokal.",
-    href: "/potensi/peternakan",
+    id: 2,
+    category: "Ekonomi Kreatif",
+    categoryColor: "bg-[#FF9800]", // Warna oranye badge
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80",
+    title: "BUMDes Ekonomi Kreatif",
+    desc: "Mengembangkan kerajinan anyaman bambu khas desa menjadi produk berkualitas ekspor. Memberdayakan pen...",
+    href: "/potensi/ekonomi-kreatif",
   },
   {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-        <path d="M12 34l6-6 4 4 6-8 4 4" /><circle cx="36" cy="14" r="4" /><path d="M8 40h32M8 8h20" /><path d="M8 16h14M8 24h10" />
-      </svg>
-    ),
-    title: "Ekonomi Kreatif",
-    desc: "Pengolahan makanan tradisional, desain produk lokal, dan pemasaran digital yang memperluas pasar UMKM desa.",
-    href: "/potensi/ekonomi-kreatif",
+    id: 3,
+    category: "Peternakan",
+    categoryColor: "bg-[#2196F3]", // Warna biru badge
+    image: "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=800&q=80",
+    title: "BUMDes Peternakan",
+    desc: "Pengelolaan ternak sapi dan kambing secara komunal. Warga dapat bermitra dengan sistem bagi hasil ya...",
+    href: "/potensi/peternakan",
   },
 ];
 
 function Potensi() {
-  // Catatan: Pastikan variabel DESA_NAME sudah dideklarasikan di file Anda
-  // const DESA_NAME = "Selorejo"; 
+  // State untuk melacak tombol filter mana yang sedang aktif
+  const [activeFilter, setActiveFilter] = useState("Semua");
+  const filters = ["Semua", "Pertanian", "Ekonomi Kreatif", "Peternakan"];
+
+  // Logika untuk menyaring data berdasarkan filter yang diklik
+  const filteredData = activeFilter === "Semua" 
+    ? BUMDES_DATA 
+    : BUMDES_DATA.filter((item) => item.category === activeFilter);
 
   return (
-    <section
-      id="potensi-desa"
-      className="py-20 lg:py-28"
-      style={{ background: "var(--beige-light)" }}
-    >
+    <section className="py-20 lg:py-28" style={{ background: "var(--beige-light, #fdfbf7)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="max-w-xl mb-14">
-          <div className="flex items-center gap-3 mb-4">
-            <span
-              className="text-xs font-medium tracking-widest uppercase"
-              style={{ color: "var(--sage-green)" }}
-            >
-              Unggulan
-            </span>
-          </div>
-          <h2
-            className="font-serif font-bold leading-tight"
-            style={{ fontSize: "clamp(1.8rem, 3vw, 2.75rem)", color: "var(--charcoal)" }}
+        
+        {/* Teks Header */}
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          {/* Tambahan Judul BUMDes */}
+          <h2 
+            className="font-serif font-bold mb-4" 
+            style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", color: "var(--charcoal, #1e3f20)" }}
           >
-            Potensi Desa {DESA_NAME}
+            Badan Usaha Milik Desa (BUMDes) Selorejo
           </h2>
+          <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+            Badan Usaha Milik Desa (BUMDes) Selorejo hadir untuk meningkatkan perekonomian desa dan kesejahteraan masyarakat melalui pengelolaan usaha berbasis potensi lokal di bidang pertanian, ekonomi kreatif, dan peternakan.
+          </p>
         </div>
 
+        {/* Tombol Filter */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                activeFilter === filter
+                  ? "bg-[#1e3f20] text-white shadow-md"
+                  : "bg-[#e8e3d5] text-gray-700 hover:bg-[#dcd6c4]"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {/* Grid Kartu Potensi */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {POTENSI.map((item) => (
-            <Link href={item.href} key={item.title} className="block outline-none">
-              <div
-                className="group p-7 rounded-2xl transition-all duration-300 cursor-pointer h-full"
-                style={{
-                  background: "var(--off-white)",
-                  boxShadow: "0 2px 12px rgba(35,69,44,0.06)",
-                  border: "1px solid rgba(216,203,168,0.5)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 32px rgba(35,69,44,0.12)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(35,69,44,0.06)";
-                }}
+          {filteredData.map((item) => (
+            <Link href={item.href} key={item.id} className="block outline-none group">
+              <div 
+                className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl" 
+                style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.05)" }}
               >
-                <div
-                  className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-5"
-                  style={{ background: "rgba(35,69,44,0.07)", color: "var(--dark-green)" }}
-                >
-                  {item.icon}
+                
+                {/* Area Gambar & Label Kategori */}
+                <div className="relative h-48 md:h-52 w-full overflow-hidden">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-bold text-white tracking-wider uppercase ${item.categoryColor}`}>
+                    {item.category}
+                  </div>
                 </div>
-                <h3
-                  className="font-serif font-semibold text-xl mb-3"
-                  style={{ color: "var(--charcoal)" }}
-                >
-                  {item.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(32,37,32,0.68)" }}>
-                  {item.desc}
-                </p>
+
+                {/* Area Konten Teks */}
+                <div className="p-6 md:p-8 flex flex-col flex-grow">
+                  <h3 className="font-serif font-bold text-lg md:text-xl mb-3 text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-6 flex-grow">
+                    {item.desc}
+                  </p>
+                  
+                  {/* Tombol Lihat Detail */}
+                  <div className="mt-auto">
+                    <span className="inline-block bg-[#f4efe6] text-[#1e3f20] px-4 py-2 rounded-lg text-xs font-bold transition-colors group-hover:bg-[#1e3f20] group-hover:text-white">
+                      Lihat Detail &rarr;
+                    </span>
+                  </div>
+                </div>
+
               </div>
             </Link>
           ))}
         </div>
+
       </div>
     </section>
   );
@@ -662,6 +680,7 @@ type Umkm = {
   location: string;
   img: string;
   phone: string;
+  whatsapp: string; // <-- Tambahan properti whatsapp
   instagram: string;
   hours: string;
   products: string;
@@ -669,119 +688,59 @@ type Umkm = {
   fullDesc: string;
 };
 
-const UMKM_DATA: Umkm[] = [
-  {
-    id: 1,
-    name: "Keripik Pisang Bu Siti",
-    category: "Makanan",
-    desc: "Keripik pisang renyah dengan berbagai varian rasa, dibuat dari pisang pilihan kebun sendiri.",
-    owner: "Siti Rahayu",
-    location: "Dusun Krajan",
-    img: "https://images.unsplash.com/photo-1775377262418-24c4d1c89574?w=600&h=400&fit=crop&auto=format",
-    phone: "628123456789",
-    instagram: "keripik_busiti",
-    hours: "08.00 – 17.00 WIB",
-    products: "Keripik Pisang Original, Balado, Coklat, Keju",
-    address: "Dusun Krajan RT 02, Desa Sumbermulyo",
-    fullDesc:
-      "Keripik Pisang Bu Siti adalah usaha rumahan yang telah berdiri sejak 2015. Menggunakan pisang kepok pilihan dari kebun sendiri, setiap keripik diproses secara higienis dengan minyak kelapa murni. Tersedia dalam varian original, balado pedas, coklat, dan keju yang cocok untuk camilan maupun oleh-oleh.",
-  },
-  {
-    id: 2,
-    name: "Kopi Desa Sumbermulyo",
-    category: "Minuman",
-    desc: "Kopi arabika dan robusta pilihan dari perkebunan lokal, diolah secara tradisional dengan cita rasa autentik.",
-    owner: "Bambang Suryanto",
-    location: "Dusun Ngemplak",
-    img: "https://images.unsplash.com/photo-1559628233-eb1b1a45564b?w=600&h=400&fit=crop&auto=format",
-    phone: "628234567890",
-    instagram: "kopi_desa_sumbermulyo",
-    hours: "07.00 – 20.00 WIB",
-    products: "Arabika Giling, Robusta Sangrai, Cold Brew Botolan",
-    address: "Dusun Ngemplak RT 05, Desa Sumbermulyo",
-    fullDesc:
-      "Kopi Desa Sumbermulyo hadir dari semangat memberdayakan petani kopi lokal. Biji kopi dipetik langsung dari kebun di lereng bukit, disangrai secara tradisional untuk menghasilkan cita rasa yang kaya dan autentik. Tersedia dalam kemasan bubuk maupun biji utuh.",
-  },
-  {
-    id: 3,
-    name: "Anyaman Desa",
-    category: "Kerajinan",
-    desc: "Produk anyaman bambu dan rotan berkualitas tinggi: tas, keranjang, dan dekorasi rumah bernilai seni tinggi.",
-    owner: "Sri Wahyuningsih",
-    location: "Dusun Gedangan",
-    img: "https://images.unsplash.com/photo-1743485754062-b6ad79fd3278?w=600&h=400&fit=crop&auto=format",
-    phone: "628345678901",
-    instagram: "anyaman_desa",
-    hours: "09.00 – 16.00 WIB",
-    products: "Tas Anyaman, Keranjang Belanja, Dekorasi Dinding",
-    address: "Dusun Gedangan RT 01, Desa Sumbermulyo",
-    fullDesc:
-      "Anyaman Desa adalah kelompok pengrajin yang melestarikan seni anyam bambu dan rotan secara turun-temurun. Setiap produk dibuat dengan tangan oleh pengrajin berpengalaman, menghasilkan karya yang fungsional sekaligus bernilai seni tinggi. Produk ini telah dipasarkan hingga ke luar pulau.",
-  },
-];
-
 function UmkmCard({ umkm, onDetail }: { umkm: Umkm; onDetail: () => void }) {
   return (
     <div
-      className="rounded-2xl overflow-hidden flex flex-col transition-all duration-300"
-      style={{
-        background: "var(--off-white)",
-        boxShadow: "0 2px 12px rgba(35,69,44,0.07)",
-        border: "1px solid rgba(216,203,168,0.5)",
-      }}
+      className="rounded-2xl overflow-hidden flex flex-col transition-all duration-300 bg-white border border-gray-100 group"
+      style={{ boxShadow: "0 2px 12px rgba(35,69,44,0.04)" }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 32px rgba(35,69,44,0.13)";
-        (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 32px rgba(35,69,44,0.1)";
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(35,69,44,0.07)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(35,69,44,0.04)";
         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
       }}
     >
-      <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "var(--beige)" }}>
-        <img src={umkm.img} alt={umkm.name} className="w-full h-full object-cover" />
+      {/* Gambar UMKM */}
+      <div className="relative h-48 overflow-hidden bg-gray-100">
+        <img 
+          src={umkm.img} 
+          alt={umkm.name} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+        />
         <span
-          className="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full"
-          style={{ background: "var(--dark-green)", color: "#fff" }}
+          className="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm bg-white/90"
+          style={{ color: "var(--sage-green, #6b8e6b)" }}
         >
           {umkm.category}
         </span>
       </div>
+      
+      {/* Info UMKM */}
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="font-serif font-semibold text-lg mb-2" style={{ color: "var(--charcoal)" }}>
+        <h3 className="font-serif font-bold text-xl mb-2 group-hover:text-[#1e3f20] transition-colors" style={{ color: "var(--charcoal)" }}>
           {umkm.name}
         </h3>
-        <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: "rgba(32,37,32,0.68)" }}>
+        <p className="text-sm leading-relaxed mb-4 flex-1 line-clamp-3 text-gray-600">
           {umkm.desc}
         </p>
-        <div className="flex items-center gap-2 mb-5">
-          <IconPin />
-          <span className="text-xs" style={{ color: "var(--sage-green)" }}>
-            {umkm.owner} · {umkm.location}
-          </span>
+        
+        <div className="border-t border-gray-100 pt-4 mb-4 text-sm text-gray-600">
+          <p className="font-semibold text-gray-900 mb-1">Pemilik: {umkm.owner}</p>
+          <p className="truncate flex items-center gap-1">
+            <IconPin /> {umkm.location}
+          </p>
         </div>
-        <div className="flex gap-3">
-          <a
-            href={`https://wa.me/${umkm.phone}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold transition-all duration-200 hover:opacity-80"
-            style={{ background: "#25D366", color: "#fff" }}
-          >
-            <IconWhatsApp size={14} /> WhatsApp
-          </a>
-          <button
-            onClick={onDetail}
-            className="flex-1 px-4 py-2.5 rounded-full text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5"
-            style={{
-              border: "1.5px solid var(--dark-green)",
-              color: "var(--dark-green)",
-              background: "transparent",
-            }}
-          >
-            Detail
-          </button>
-        </div>
+
+        {/* Tombol Detail (Full Width, Tanpa WA) */}
+        <button
+          onClick={onDetail}
+          className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90 flex items-center justify-center mt-auto"
+          style={{ background: "rgba(30,63,32,0.06)", color: "var(--dark-green, #1e3f20)" }}
+        >
+          Lihat Detail UMKM
+        </button>
       </div>
     </div>
   );
@@ -803,100 +762,53 @@ function UmkmModal({ umkm, onClose }: { umkm: Umkm; onClose: () => void }) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6"
-      style={{ background: "rgba(32,37,32,0.6)", backdropFilter: "blur(4px)" }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/60 backdrop-blur-sm"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
       <div
-        className="relative w-full sm:max-w-lg max-h-[90vh] overflow-y-auto"
-        style={{
-          background: "var(--off-white)",
-          borderRadius: "1.5rem 1.5rem 0 0",
-          boxShadow: "0 -8px 60px rgba(0,0,0,0.2)",
-        }}
+        className="relative w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-white sm:rounded-2xl rounded-t-3xl shadow-2xl animate-in fade-in zoom-in duration-200 flex flex-col"
       >
-        {/* Close button */}
+        {/* Tombol Close (X) */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-70"
-          style={{ background: "rgba(32,37,32,0.12)" }}
+          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-colors bg-black/50 hover:bg-black/80 text-white"
         >
           <IconX />
         </button>
 
-        {/* Image */}
-        <div className="aspect-[16/9] overflow-hidden rounded-t-[1.5rem]" style={{ background: "var(--beige)" }}>
+        {/* Gambar Modal */}
+        <div className="relative h-56 sm:h-72 w-full shrink-0 bg-gray-100">
           <img src={umkm.img} alt={umkm.name} className="w-full h-full object-cover" />
+          <div className="absolute bottom-4 left-6 px-3 py-1 bg-[#1e3f20] rounded-full shadow-md">
+            <span className="text-xs font-bold text-white tracking-wider uppercase">
+              {umkm.category}
+            </span>
+          </div>
         </div>
 
-        <div className="p-7">
-          <span
-            className="text-xs font-semibold px-3 py-1 rounded-full mb-3 inline-block"
-            style={{ background: "rgba(35,69,44,0.12)", color: "var(--dark-green)" }}
-          >
-            {umkm.category}
-          </span>
-          <h2 className="font-serif font-bold text-2xl mb-1" style={{ color: "var(--charcoal)" }}>
+        {/* Konten Text Modal */}
+        <div className="p-6 sm:p-8">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-1">
             {umkm.name}
           </h2>
-          <p className="text-sm mb-5" style={{ color: "var(--sage-green)" }}>
+          <p className="text-sm text-gray-500 mb-6 pb-4 border-b border-gray-100">
             Pemilik: {umkm.owner}
           </p>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(32,37,32,0.75)" }}>
+
+          <p className="text-gray-700 mb-8 leading-relaxed">
             {umkm.fullDesc}
           </p>
 
-          <div
-            className="rounded-xl overflow-hidden mb-6"
-            style={{ border: "1px solid var(--beige)" }}
-          >
-            {[
-              { icon: <IconPin />, label: "Produk", value: umkm.products },
-              { icon: <IconPin />, label: "Alamat", value: umkm.address },
-              { icon: <IconClock />, label: "Jam Operasional", value: umkm.hours },
-            ].map((row, i) => (
-              <div
-                key={row.label}
-                className="flex gap-3 px-5 py-3.5"
-                style={{
-                  borderBottom: i < 2 ? "1px solid var(--beige)" : "none",
-                  background: i % 2 === 0 ? "rgba(216,203,168,0.1)" : "transparent",
-                }}
-              >
-                <span style={{ color: "var(--sage-green)", marginTop: 2 }}>{row.icon}</span>
-                <div>
-                  <div className="text-xs font-medium mb-0.5" style={{ color: "var(--sage-green)" }}>
-                    {row.label}
-                  </div>
-                  <div className="text-sm" style={{ color: "var(--charcoal)" }}>
-                    {row.value}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+            <div>
+              <p className="font-bold text-gray-900 mb-1">Alamat:</p>
+              <p className="text-gray-600">{umkm.address || '-'}</p>
+            </div>
+            <div>
+              <p className="font-bold text-gray-900 mb-1">WhatsApp:</p>
+              <p className="text-gray-600">{umkm.whatsapp || umkm.phone || '-'}</p> {/* <-- Memanggil prioritas whatsapp dari admin */}
+            </div>
           </div>
-
-          <div className="flex gap-3 mb-5">
-            <a
-              href={`https://instagram.com/${umkm.instagram}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold transition-opacity hover:opacity-80"
-              style={{ background: "rgba(35,69,44,0.1)", color: "var(--dark-green)" }}
-            >
-              <IconInstagram size={14} /> @{umkm.instagram}
-            </a>
-          </div>
-
-          <a
-            href={`https://wa.me/${umkm.phone}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-4 rounded-full text-sm font-semibold transition-opacity hover:opacity-90"
-            style={{ background: "#25D366", color: "#fff" }}
-          >
-            <IconWhatsApp size={18} /> Hubungi via WhatsApp
-          </a>
         </div>
       </div>
     </div>
@@ -910,6 +822,7 @@ function Umkm() {
   useEffect(() => {
     async function loadUmkm() {
       const data = await getUmkmStores();
+      // Hanya menampilkan maksimal 3 data di halaman depan
       const mapped = data.slice(0, 3).map(u => ({
         id: u.id,
         name: u.name,
@@ -917,10 +830,11 @@ function Umkm() {
         desc: u.description || '',
         owner: u.owner_name || '',
         location: u.address || '',
-        img: u.image_url || 'https://images.unsplash.com/photo-1775377262418-24c4d1c89574?w=600&h=400&fit=crop&auto=format',
+        img: u.cover_image_url || u.image_url || 'https://images.unsplash.com/photo-1775377262418-24c4d1c89574?w=600&h=400&fit=crop&auto=format',
         phone: u.phone || '',
-        instagram: '', // Tidak ada di skema
-        hours: '08.00 - 17.00 WIB',
+        whatsapp: u.whatsapp || '', // <-- Mengambil data kolom whatsapp dari database
+        instagram: u.instagram || '',
+        hours: u.operating_hours || '08.00 - 17.00 WIB',
         products: 'Berbagai produk',
         address: u.address || '',
         fullDesc: u.description || ''
@@ -935,8 +849,8 @@ function Umkm() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Bagian Judul */}
-        <div className="max-w-xl mb-14">
-          <div className="flex items-center gap-3 mb-4">
+        <div className="max-w-xl mx-auto text-center mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
@@ -950,21 +864,19 @@ function Umkm() {
           >
             UMKM Unggulan Desa
           </h2>
-          <p className="text-base" style={{ color: "rgba(32,37,32,0.65)" }}>
+          <p className="text-base mt-2" style={{ color: "rgba(32,37,32,0.65)" }}>
             Kenali dan dukung produk lokal masyarakat Desa {DESA_NAME}
           </p>
         </div>
 
         {/* Bagian Grid Kartu UMKM */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {umkms.map((u) => (
             <UmkmCard key={u.id} umkm={u} onDetail={() => setSelected(u)} />
           ))}
         </div>
 
-        {/* ========================================= */}
-        {/* TAMBAHAN TOMBOL SELENGKAPNYA DI SINI */}
-        {/* ========================================= */}
+        {/* Tombol Selengkapnya */}
         <div className="mt-12 flex justify-center w-full">
           <Link
             href="/umkm"
@@ -999,7 +911,6 @@ function Umkm() {
     </section>
   );
 }
-
 import { getVillageOfficials } from "@/lib/database";
 import type { VillageOfficial } from "@/types";
 
@@ -1251,8 +1162,10 @@ function Kontak() {
   return (
     <section id="kontak" className="py-20 lg:py-28" style={{ background: "var(--off-white)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="max-w-xl mb-14">
-          <div className="flex items-center gap-3 mb-4">
+        
+        {/* Bagian Judul - Sudah diposisikan ke tengah */}
+        <div className="max-w-xl mx-auto text-center mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <span
               className="text-xs font-medium tracking-widest uppercase"
               style={{ color: "var(--sage-green)" }}
