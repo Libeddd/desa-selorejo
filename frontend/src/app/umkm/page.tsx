@@ -41,26 +41,6 @@ export default async function UmkmPage({
       {/* Konten Utama */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-8 relative z-10">
         
-        {/* Filter Kategori */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-8 flex justify-center gap-3 flex-wrap">
-          <Link 
-            href="/umkm"
-            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${!category ? "text-white bg-[#1e3f20]" : "text-gray-600 bg-gray-100 hover:bg-gray-200"}`}
-          >
-            Semua
-          </Link>
-          
-          {categories.map((cat) => (
-            <Link 
-              key={cat}
-              href={`/umkm?category=${cat}`}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${category === cat ? "text-white bg-[#1e3f20]" : "text-gray-600 bg-gray-100 hover:bg-gray-200"}`}
-            >
-              {cat}
-            </Link>
-          ))}
-        </div>
-
         {/* Memanggil Grid dan Popup Modal */}
         <UmkmClient umkmList={umkmList} />
 
