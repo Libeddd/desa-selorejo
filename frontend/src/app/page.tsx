@@ -575,14 +575,8 @@ const BUMDES_DATA = [
 ];
 
 function Potensi() {
-  // State untuk melacak tombol filter mana yang sedang aktif
-  const [activeFilter, setActiveFilter] = useState("Semua");
-  const filters = ["Semua", "Pertanian", "Ekonomi Kreatif", "Peternakan"];
-
-  // Logika untuk menyaring data berdasarkan filter yang diklik
-  const filteredData = activeFilter === "Semua" 
-    ? BUMDES_DATA 
-    : BUMDES_DATA.filter((item) => item.category === activeFilter);
+  // Langsung gunakan semua data
+  const filteredData = BUMDES_DATA;
 
   return (
     <section className="py-20 lg:py-28" style={{ background: "var(--beige-light, #fdfbf7)" }}>
@@ -600,23 +594,6 @@ function Potensi() {
           <p className="text-gray-600 leading-relaxed text-sm md:text-base">
             Badan Usaha Milik Desa (BUMDes) Selorejo hadir untuk meningkatkan perekonomian desa dan kesejahteraan masyarakat melalui pengelolaan usaha berbasis potensi lokal di bidang pertanian, ekonomi kreatif, dan peternakan.
           </p>
-        </div>
-
-        {/* Tombol Filter */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                activeFilter === filter
-                  ? "bg-[#1e3f20] text-white shadow-md"
-                  : "bg-[#e8e3d5] text-gray-700 hover:bg-[#dcd6c4]"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
         </div>
 
         {/* Grid Kartu Potensi */}
@@ -870,9 +847,20 @@ function Umkm() {
         </div>
 
         {/* Bagian Grid Kartu UMKM */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Container Scroll Horizontal */}
+        <div 
+          className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <style dangerouslySetInnerHTML={{__html: `
+            .flex::-webkit-scrollbar { display: none; }
+          `}} />
           {umkms.map((u) => (
-            <UmkmCard key={u.id} umkm={u} onDetail={() => setSelected(u)} />
+            <div key={u.id} className="min-w-[280px] sm:min-w-[340px] max-w-[380px] flex-shrink-0 snap-start h-full flex">
+              <div className="w-full h-full">
+                <UmkmCard umkm={u} onDetail={() => setSelected(u)} />
+              </div>
+            </div>
           ))}
         </div>
 
@@ -1186,8 +1174,7 @@ function Kontak() {
           <div>
             <div className="space-y-5 mb-8">
               {[
-                { icon: <IconPin />, label: "Alamat Kantor", value: `Jl. Desa ${DESA_NAME} No. 01, ${KECAMATAN}, ${KABUPATEN}, ${PROVINSI}` },
-                { icon: <IconMail />, label: "Email", value: `desa.${DESA_NAME.toLowerCase()}@${KABUPATEN.toLowerCase()}.go.id` },
+                { icon: <IconPin />, label: "Alamat Kantor", value: `89FW+M7W, Selorejo, Kawedanan, Dongol, Selorejo, Kec. Magetan, Kabupaten Magetan, Jawa Timur 63382` },
                 { icon: <IconClock />, label: "Jam Pelayanan", value: "Senin – Jumat, 08.00 – 15.00 WIB" },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-4">
@@ -1208,19 +1195,7 @@ function Kontak() {
                 </div>
               ))}
             </div>
-
-            <button
-              className="flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
-              style={{
-                background: "var(--dark-green)",
-                color: "#fff",
-                boxShadow: "0 4px 20px rgba(35,69,44,0.3)",
-              }}
-            >
-              <IconWhatsApp size={16} /> Hubungi Kami
-            </button>
           </div>
-
           
         </div>
       </div>
@@ -1263,7 +1238,7 @@ function Footer() {
             <h4 className="text-xs font-semibold tracking-widest uppercase mb-5" style={{ color: "rgba(248,247,242,0.45)" }}>
               Navigasi
             </h4>
-            <ul className="space-y-3">
+            <ul className="grid grid-cols-2 gap-y-3 gap-x-4">
               <li>
                 <Link href="/" className="text-sm transition-opacity hover:opacity-70" style={{ color: "rgba(248,247,242,0.75)" }}>
                   Beranda
